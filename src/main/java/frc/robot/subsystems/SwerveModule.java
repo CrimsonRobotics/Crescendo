@@ -18,7 +18,6 @@ import frc.robot.CANSparkMaxUtil.Usage;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix6.hardware.CANcoder;
 
-
 /** Add your docs here. */
 public class SwerveModule {
     public final int moduleNumber;
@@ -150,9 +149,6 @@ public class SwerveModule {
         this.turningEncoder.setPosition(turningOffset.getDegrees());
         //sets the position of the turning encoders to the absolute position of the CANCoders. idk if still relevant
       }
-
-
-
     
 
     //calculates the desired position of the swerve wheel
@@ -161,71 +157,79 @@ public class SwerveModule {
         //desiredState = SwerveOpt.optimize(desiredState, getState().angle);
         //desiredState = SwerveModuleState.optimize(desiredState, encoderRotation);
 
-        setAngle(desiredState);
-        setSpeed(desiredState, isAuto);
+        boolean invertDriveMotor = setAngle(desiredState);
+        setSpeed(desiredState, isAuto, invertDriveMotor);
     }
     //calculate the necessary speed for the speed motor and set the motor to that speed
-    private void setSpeed(SwerveModuleState desiredState, boolean isAuto) {
+    private void setSpeed(SwerveModuleState desiredState, boolean isAuto, boolean invertDriveMotor) {
         if (isAuto == false) {
             double driveMotorOutput = desiredState.speedMetersPerSecond / Constants.maxSpeed;
-            driveMotor.set(driveMotorOutput);
+            driveMotor.set(invertDriveMotor ? driveMotorOutput * -1 : driveMotorOutput);
         }
         else {
-            //auto stuff with the feedforward loop; do it later:D
-            
+            //auto stuff with the feedforward loop; do it later:D  
             double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond) + drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
-            driveMotor.setVoltage(driveAutoMotorVoltage);
-            
+            driveMotor.setVoltage(invertDriveMotor ? driveAutoMotorVoltage * -1 : driveAutoMotorVoltage);
         }
 
     
     }
     //runs the PID loop for the turning motor, but only if the required speed is greater than 1% motor power, then powers the turning motor
-    private void setAngle(SwerveModuleState desiredState) {
+    private boolean setAngle(SwerveModuleState desiredState) {
+        boolean invertDriveMotor = false;
+        // Get the current state of the swerve module (i.e. What direction is it facing?)
         SwerveModuleState currentState = this.getState();
-        // Rotation2d desiredTurningAngle =
-        // (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.maxSpeed * 0.01))
-        //   ? currentState.angle
-        //   : desiredState.angle;
 
-        //turningPID.setReference(turning.getDegrees(), ControlType.kPosition);
-
-        //MAAAAAATH
+        // What is the current direction (in degrees) the swerve module is facing?
         double currentDegrees = (currentState.angle.getDegrees() - this.turningOffset.getDegrees());
         
+        // We want the current degrees between [-180, 180]. When looking at a circle
+        // -190 is equivalent to 170 so the below ternaries convert numbers less than -180
+        // or greater than 180 into [-180,180] 
         currentDegrees = currentDegrees < -180 ? currentDegrees + 360 : currentDegrees;
         currentDegrees = currentDegrees > 180 ? currentDegrees - 360 : currentDegrees;
+
+        // Next figure out the what direction the service module should be pointing. We mode the number
+        // (% 360) to make sure the number is between [-360,360]
         double desiredDegrees = desiredState.angle.getDegrees() % 360;
+        // The following logic calculates the the different between the desired angle of the
+        // swerve module to the desired angle. The final result will be some number
+        // in the range [-180, 180]
         double diff = (currentDegrees - desiredDegrees + 180) % 360 - 180;
         diff = diff < -180 ? diff + 360 : diff;
         diff = diff > 180 ? diff - 360 : diff;
-        /* 
 
-        System.out.println("CURRENT DEGREES");
-        System.out.println(currentDegrees);
-        System.out.println(desiredDegrees);
-        System.out.println(diff);
-        */
-        // currentDegrees = -170
-        // desiredDegrees = -179
-        // off by +9
+        // In theory, we could turn the swerve to this "diff" angle and everything would work but its
+        // possible to be more efficient. For example, if the operator pushes the joystick forward,
+        // then pulls it full back, the code above will turn the swerve module 180 degrees when
+        // instead we could just reverse the direction of the drive motor.
 
+        // If the `diff` is greater than 90 or less than -90 then invert the drive motor
+        // and change the diff.
+        // -120 is equivalent to 60 with an inverted drive direction.
+        // 120 is equivalent to -60 with an inverted drive direction.
+        if (Math.abs(diff) > 90) {
+            invertDriveMotor = true;
+            if (diff < 0) {
+                diff += 180;
+            } else {
+                diff -= 180;
+            }
+        }
 
-        // off by 11
-        // desiredDegrees = 179
-
-
-        // 190
-        // 430
-        //desiredState = SwerveOpt.optimize(desiredState, getState().angle);
-        
-        //Checks if turning motor value is greater than 1, if so, keeps turning motor value at 1
+        // If we are a degree or less off, the turning motor will not do anything, else, calculate the pid
+        // values based off the diff and 0.
         double turningMotorValue = Math.abs(diff) < 1 ? 0 : turningPID.calculate(diff, 0);
+        // Motors can only take a value in the range [-1,1] but the PID may output a value outside
+        // this range, thus we "clamp" the output of the PID such that -1.5 would just be -1.
         turningMotorValue = turningMotorValue > 1 ? 1 : turningMotorValue;
         turningMotorValue = turningMotorValue < -1 ? -1 : turningMotorValue;
-        // System.out.println(String.format("DESIRED ANGLE: %f", currentState.angle.getDegrees() - this.turningOffset.getDegrees()));
-        // System.out.println(String.format("SPEED SET: %f", turningMotorValue));
-        turningMotor.set(turningMotorValue); // turningMotorValue
+
+        // Turn the motor to the desired position
+        turningMotor.set(turningMotorValue);
+
+        // Return the direction the drive motor is expected to go.
+        return invertDriveMotor
     }
 
     public void gogogo() {
