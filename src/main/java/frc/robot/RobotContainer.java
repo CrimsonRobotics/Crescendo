@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShooterIntake;
 import frc.robot.commands.SwerveAuto;
 import frc.robot.commands.SwerveTeleOp;
+import frc.robot.commands.intakeSpin;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,9 +40,14 @@ public class RobotContainer {
 
   private final JoystickButton resetButton = new JoystickButton(driverL, 12);
   private final JoystickButton resetYawButton = new JoystickButton(driverL, 1);
+  private final JoystickButton shootButton = new JoystickButton(driverR, 1);
+  private final JoystickButton intakePositionButton = new JoystickButton(driverR, 1);
 
   public final SwerveDrive driveSwerve;
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public final Intake inTake = new Intake();
+  public final Shooter noteShooter = new Shooter();
+  public final Climber chainClimber = new Climber();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,6 +62,8 @@ public class RobotContainer {
             driverR
           )
         );
+    //this.inTake.setDefaultCommand(new intakeSpin(inTake));
+    //this.noteShooter.setDefaultCommand(new ShooterIntake(noteShooter));
     configureButtonBindings();
   }
 
@@ -75,7 +88,8 @@ public class RobotContainer {
 
     // resetButton.onTrue(new InstantCommand(() -> driveSwerve.resetToAbsolute2()));
      resetYawButton.onTrue(new InstantCommand(() -> driveSwerve.zeroGyro()));
-
+     shootButton.onTrue(new ShootCommand(noteShooter));
+     shootButton.onFalse(new intakeSpin(inTake));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.

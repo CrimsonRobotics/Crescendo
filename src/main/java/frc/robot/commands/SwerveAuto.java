@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -29,15 +30,19 @@ public class SwerveAuto extends SequentialCommandGroup {
     
     TrajectoryConfig configuration = new TrajectoryConfig(Constants.maxAutoSpeed, Constants.maxAutoAcceleration).setKinematics(Constants.SwerveMap);
 
-    Trajectory newTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(1, 1), new Translation2d(2, -1)), new Pose2d(0, 0, new Rotation2d(0)), configuration);
+    Trajectory newTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(2, 0), new Translation2d(4,0)), new Pose2d(6, 0, new Rotation2d(0)), configuration);
     ProfiledPIDController turnController = new ProfiledPIDController(Constants.autoTurningP, Constants.autoTurningI, Constants.autoTurningD, Constants.autoTurnController);
     turnController.enableContinuousInput(-Math.PI, Math.PI);
+
+
 
     SwerveControllerCommand autoController = new SwerveControllerCommand(newTrajectory, driveSwerve::getPose, Constants.SwerveMap, new PIDController(Constants.autoXP, Constants.autoXI, Constants.autoXD), new PIDController(Constants.autoYP, Constants.autoYI, Constants.autoYD), turnController, driveSwerve::setModuleStates, driveSwerve);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> driveSwerve.resetOdometry(newTrajectory.getInitialPose())), autoController);
+      new WaitCommand(3),
+      new InstantCommand(() -> driveSwerve.resetOdometry(newTrajectory.getInitialPose())), autoController
+    );
     
     
   }

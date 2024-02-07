@@ -61,7 +61,7 @@ public final class Constants {
 
 
   //PID Constants
-  public static final double drivekP = 0.01; 
+  public static final double drivekP = 0.005; 
   public static final double drivekI = 0;
   public static final double drivekD = 0;
 
@@ -69,10 +69,7 @@ public final class Constants {
   public static final double turningkI = 0.0006; //init value 0.1
   public static final double turningkD = 0.0001; //init value 0
 
-  //feedforward constants
-  public static final double ffkS = 0.667;
-  public static final double ffkV = 2.44;
-  public static final double ffkA = 0.27;
+  
 
 
   //Gear Ratios (for the conversion factors)
@@ -86,8 +83,8 @@ public final class Constants {
 
   
   //Max drive of the robot (in meters per second or radians per second)
-  public static final double maxSpeed = 4.5;
-  public static final double maxAutoSpeed = 1;
+  public static final double maxSpeed = 5;
+  public static final double maxAutoSpeed = 2.5;
   public static final double maxAutoAcceleration = 0.5;
   public static final double maxAngularVelocity = 7.0;
   public static final double maxAutoAngularVelocity = 3.0;
@@ -110,8 +107,41 @@ public final class Constants {
     );
 
 
+
+    //Intake Constants
+
+    public static final int intakeMotorID = 0;
+
+    public static final double intakeMotorSpeed = 1;
+
+
+    //Shooter Constants
+
+    public static final int fastShooterMotorID = 0;
+    public static final int slowShooterMotorID = 0;
+    public static final int shooterHoldMotorID = 0;
+
+    public static final int shooterPotID = 0;
+
+    public static final double shooterkP = 1;
+    public static final double shooterkI = 0;
+    public static final double shooterkD = 0;
+
+    public static final double shooterIntakeSpeed = 0;
+
+    public static final double shooterHighSpeed = 1;
+    public static final double shooterLowSpeed = 0.5;
+    public static final double shooterBumpSpeed = 0.2; 
+
+
+    //Climber Constants
+
+    public static final int climberMotorLeftID = 0;
+    public static final int climberMotorRightID = 0;
+
+
   //auto constants
-    public static final double autoTurningP = 1;
+    public static final double autoTurningP = .88;
     public static final double autoTurningI = 0;
     public static final double autoTurningD = 0;
 
@@ -124,6 +154,11 @@ public final class Constants {
     public static final double autoYD = 0;
 
     public static final TrapezoidProfile.Constraints autoTurnController = new TrapezoidProfile.Constraints(maxAutoAngularVelocity, maxAutoAngularVelocity);
+
+    //feedforward constants
+  public static final double ffkS = 0.99;
+  public static final double ffkV = 1.2; //5 m/s 2.44
+  public static final double ffkA = 0.1; //accel to 5 m/s 0.27
 
 
 
