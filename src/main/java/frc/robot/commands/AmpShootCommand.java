@@ -4,17 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
-public class ShootCommand extends Command {
-  Shooter shooter;
-  /** Creates a new ShootCommand. */
-  public ShootCommand(Shooter shooter) {
+public class AmpShootCommand extends Command {
+Shooter shooter;
+  /** Creates a new ampShoot. */
+  public AmpShootCommand(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(this.shooter);
+    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +24,7 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootCommand(Constants.shooterHighSpeed, Constants.shooterLowSpeed, Constants.shooterBumpSpeed);
-
+    this.shooter.ampShootCommand(Constants.shooterHighSpeed, Constants.shooterLowSpeed);
   }
 
   // Called once the command ends or is interrupted.

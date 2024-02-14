@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
+  
   CANSparkMax intakeMotor;
   DigitalInput shooterLimitSwitch;
+  
   /** Creates a new Intake. */
   public Intake() {
   intakeMotor = new CANSparkMax(Constants.intakeMotorID, MotorType.kBrushless);
@@ -25,12 +27,12 @@ public class Intake extends SubsystemBase {
   }
 
   
-  public void intakeSpin() {
+  public void intakeSpin(double speed) {
     if (shooterLimitSwitch.get()) {
       intakeMotor.set(0);
     }
     else {
-    intakeMotor.set(Constants.intakeMotorSpeed);
+    intakeMotor.set(speed);
     }
   }
 

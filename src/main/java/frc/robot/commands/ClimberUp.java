@@ -4,17 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 
-public class ShootCommand extends Command {
-  Shooter shooter;
-  /** Creates a new ShootCommand. */
-  public ShootCommand(Shooter shooter) {
+public class ClimberUp extends Command {
+  Climber climber;
+  /** Creates a new ClimberUp. */
+  public ClimberUp(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(this.climber);
+    this.climber = climber;
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +24,7 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootCommand(Constants.shooterHighSpeed, Constants.shooterLowSpeed, Constants.shooterBumpSpeed);
-
+    this.climber.climberUp(Constants.climberUpSpeed);
   }
 
   // Called once the command ends or is interrupted.

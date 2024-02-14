@@ -5,13 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterHoldCommand extends Command {
+public class SpinUpAmp extends Command {
   Shooter shooter;
-  /** Creates a new ShooterHoldCommand. */
-  public ShooterHoldCommand(Shooter shooter) {
+  /** Creates a new SpinUpAmp. */
+  public SpinUpAmp(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(this.shooter);
     this.shooter = shooter;
   }
 
@@ -22,7 +24,7 @@ public class ShooterHoldCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    this.shooter.spinUpAmp(Constants.shooterHighSpeed, Constants.shooterLowSpeed);
   }
 
   // Called once the command ends or is interrupted.

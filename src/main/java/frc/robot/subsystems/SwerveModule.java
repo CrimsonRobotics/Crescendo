@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.CANSparkMaxUtil;
 import frc.robot.Constants;
 import frc.robot.CANSparkMaxUtil.Usage;
@@ -158,6 +159,9 @@ public class SwerveModule {
         //desiredState = SwerveModuleState.optimize(desiredState, encoderRotation);
 
         boolean invertDriveMotor = setAngle(desiredState);
+        if (isAuto) {
+            new WaitCommand(2);
+        }
         setSpeed(desiredState, isAuto, invertDriveMotor);
     }
     //calculate the necessary speed for the speed motor and set the motor to that speed
@@ -171,8 +175,7 @@ public class SwerveModule {
             double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond) + feedForward.calculate(desiredState.speedMetersPerSecond);
             //double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
-            //driveMotor.setVoltage(invertDriveMotor ? driveAutoMotorVoltage * -1 : driveAutoMotorVoltage);
-            driveMotor.setVoltage(driveAutoMotorVoltage);
+            driveMotor.setVoltage(invertDriveMotor ? driveAutoMotorVoltage * -1 : driveAutoMotorVoltage);
         }
 
     

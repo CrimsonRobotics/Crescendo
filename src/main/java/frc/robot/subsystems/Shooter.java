@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
+  
   CANSparkMax fastShooterMotor;
   CANSparkMax slowShooterMotor;
   CANSparkMax shooterHoldMotor;
 
-  AnalogPotentiometer shooterPot;
 
   PIDController shooterPID;
 
@@ -30,9 +30,12 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
+    
     fastShooterMotor = new CANSparkMax(Constants.fastShooterMotorID, MotorType.kBrushless);
     slowShooterMotor = new CANSparkMax(Constants.slowShooterMotorID, MotorType.kBrushless);
     shooterHoldMotor = new CANSparkMax(Constants.shooterHoldMotorID, MotorType.kBrushless);
+
+    shooterLimitSwitch = new DigitalInput(0);
 
     fastShooterMotor.setIdleMode(IdleMode.kBrake);
     slowShooterMotor.setIdleMode(IdleMode.kBrake);
@@ -42,7 +45,6 @@ public class Shooter extends SubsystemBase {
     slowShooterMotor.setInverted(false);
     shooterHoldMotor.setInverted(false);
 
-    shooterPot = new AnalogPotentiometer(Constants.shooterPotID, 180, 0);
 
     shooterPID = new PIDController(Constants.shooterkP, Constants.shooterkI, Constants.shooterkD);
     shooterPID.setIntegratorRange(0, 1);
@@ -50,7 +52,7 @@ public class Shooter extends SubsystemBase {
     shooterIntake(Constants.shooterIntakeSpeed);
 
   }
-
+ 
   public void setIntakeState() {
     if (shooterLimitSwitch.get()) {
       intakeState = true;
@@ -75,8 +77,8 @@ public class Shooter extends SubsystemBase {
 
   public void spinUpShooter(double highSpeed, double lowSpeed) {
     fastShooterMotor.set(highSpeed);
-    slowShooterMotor.set(lowSpeed);
-    shooterHoldMotor.set(0);
+    slowShooterMotor.set(highSpeed);
+    shooterHoldMotor.set(-Constants.shooterBumpSpeed);
   }
 
   public void shootCommand(double highSpeed, double lowSpeed, double bumpSpeed) {
@@ -85,7 +87,18 @@ public class Shooter extends SubsystemBase {
     shooterHoldMotor.set(bumpSpeed);
   }
 
-  
+  public void spinUpAmp(double highSpeed, double lowSpeed) {
+    fastShooterMotor.set(highSpeed);
+    slowShooterMotor.set(lowSpeed);
+    shooterHoldMotor.set(-Constants.shooterBumpSpeed);
+  }
+  public void ampShootCommand(double highSpeed, double lowSpeed) {
+    fastShooterMotor.set(highSpeed);
+    slowShooterMotor.set(lowSpeed);
+    shooterHoldMotor.set(Constants.shooterBumpSpeed);
+  }
+
+
 
   @Override
   public void periodic() {

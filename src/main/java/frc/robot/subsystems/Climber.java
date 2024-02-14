@@ -17,6 +17,8 @@ public class Climber extends SubsystemBase {
   CANSparkMax climberMotorRight;
 
   boolean climberOn;
+  double climberCurrentL;
+  double climberCurrentR;
   public Climber() {
     climberMotorLeft = new CANSparkMax(Constants.climberMotorLeftID, MotorType.kBrushless);
     climberMotorRight = new CANSparkMax(Constants.climberMotorRightID, MotorType.kBrushless);
@@ -28,6 +30,25 @@ public class Climber extends SubsystemBase {
     climberMotorRight.setInverted(false);
 
     climberOn = false;
+  }
+
+  public void getClimberCurrent() {
+    climberCurrentL = climberMotorLeft.getOutputCurrent();
+    climberCurrentR = climberMotorRight.getOutputCurrent();
+  }
+
+  public void climberUp(double climbSpeed) {
+    climberMotorLeft.set(climbSpeed);
+    climberMotorRight.set(climbSpeed);
+
+  }
+
+  public void climberRightDown() {
+    climberMotorRight.set(climberCurrentL);
+  }
+
+  public void climberLeftDown() {
+
   }
 
   @Override

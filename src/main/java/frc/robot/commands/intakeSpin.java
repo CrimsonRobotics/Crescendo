@@ -11,11 +11,13 @@ import frc.robot.subsystems.Intake;
 public class intakeSpin extends Command {
   Intake inTake;
   boolean isFinished;
+  double speed;
   /** Creates a new intakeSpin. */
-  public intakeSpin(Intake intakeArm) {
+  public intakeSpin(Intake intakeArm, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeArm);
     inTake = intakeArm;
+    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +30,7 @@ public class intakeSpin extends Command {
   @Override
   public void execute() {
     
-    inTake.intakeSpin();
+    inTake.intakeSpin(speed);
   }
 
   // Called once the command ends or is interrupted.

@@ -4,17 +4,21 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Pivot;
 
-public class ShootCommand extends Command {
-  Shooter shooter;
-  /** Creates a new ShootCommand. */
-  public ShootCommand(Shooter shooter) {
+public class PivotHoldCommand extends Command {
+  Pivot pivot;
+  double position;
+  
+  /** Creates a new PivotHoldCommand. */
+  public PivotHoldCommand(Pivot pivot, double position) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(this.pivot);
+    this.pivot = pivot;
+    this.position = position;
   }
 
   // Called when the command is initially scheduled.
@@ -24,8 +28,11 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootCommand(Constants.shooterHighSpeed, Constants.shooterLowSpeed, Constants.shooterBumpSpeed);
+    double shooterPivotValue = this.pivot.pivotPot.get();
 
+    double motorSpeed = MathUtil.clamp(this.pivot.pivotPID.calculate(shooterPivotValue, position), 0, 100);
+    motorSpeed /= 100;
+    this.pivot.setSpeed(motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
