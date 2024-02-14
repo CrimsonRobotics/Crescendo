@@ -148,12 +148,12 @@ public class RobotContainer {
     climberUp5.whileTrue(new ClimberUp(chainClimber));
     climberUp6.whileTrue(new ClimberUp(chainClimber));
 
-    climberDownButton.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown()));
-    climberDown2.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown()));
-    climberDown3.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown()));
-    climberDown4.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown()));
-    climberDown5.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown()));
-    climberDown6.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown()));
+    climberDownButton.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
+    climberDown2.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
+    climberDown3.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
+    climberDown4.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
+    climberDown5.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
+    climberDown6.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
 
     
      
