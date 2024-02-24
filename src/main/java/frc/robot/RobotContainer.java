@@ -3,32 +3,36 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import frc.robot.commands.ClimberLeftDown;
-import frc.robot.commands.ClimberRightDown;
+/* 
+import frc.robot.commands.AmpShootCommand;
+import frc.robot.commands.ClimberStop;
 import frc.robot.commands.ClimberUp;
-import frc.robot.commands.Drive;
 import frc.robot.commands.PivotHoldCommand;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterIntake;
 import frc.robot.commands.SpinUpAmp;
 import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.intakeSpin;
+
  
  import frc.robot.commands.ShootCommand;
  import frc.robot.commands.ShooterIntake;
-import frc.robot.commands.SwerveAuto;
-import frc.robot.commands.SwerveTeleOp;
+
  import frc.robot.commands.intakeSpin;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+*/
+import frc.robot.commands.SwerveAuto;
+import frc.robot.commands.SwerveWeaver;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.Drive;
 import frc.robot.subsystems.SwerveDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -55,40 +59,36 @@ public class RobotContainer {
   private final JoystickButton shootButton = new JoystickButton(operatorR, 1);
   private final JoystickButton intakePositionButton = new JoystickButton(operatorR, 2);
   private final JoystickButton subwooferPositionButton = new JoystickButton(operatorR, 4);
-  private final JoystickButton ampPositionButton = new JoystickButton(operatorL, 3);
+  private final JoystickButton ampPositionButton = new JoystickButton(operatorR, 5);
   private final JoystickButton ampShootButton = new JoystickButton(operatorL, 1);
-  private final JoystickButton podiumPositionButton = new JoystickButton(operatorR, 3);
+  private final JoystickButton podiumPositionButton = new JoystickButton(operatorL, 4);
   private final JoystickButton sourceIntakeButton = new JoystickButton(operatorR, 3);
+  
+  //TODO: Bind climberBackButton
+  private final JoystickButton climberBackButton = new JoystickButton(driverL, 11);
 //Climber up: low buttons left side, operatorL 11-16
-  private final JoystickButton climberUpButton = new JoystickButton(operatorL, 11);
-  private final JoystickButton climberUp2 = new JoystickButton(operatorL, 12);
-  private final JoystickButton climberUp3 = new JoystickButton(operatorL, 13);
-  private final JoystickButton climberUp4 = new JoystickButton(operatorL, 14);
-  private final JoystickButton climberUp5 = new JoystickButton(operatorL, 15);
-  private final JoystickButton climberUp6 = new JoystickButton(operatorL, 16);
-
+  private final JoystickButton climberUpButton = new JoystickButton(operatorL, 14);
+  
   //Climber down: low buttons right side, operatorR 11-16
-  private final JoystickButton climberDownButton = new JoystickButton(operatorR, 11);
-  private final JoystickButton climberDown2 = new JoystickButton(operatorR, 12);
-  private final JoystickButton climberDown3 = new JoystickButton(operatorR, 13);
-  private final JoystickButton climberDown4 = new JoystickButton(operatorR, 14);
-  private final JoystickButton climberDown5 = new JoystickButton(operatorR, 15);
-  private final JoystickButton climberDown6 = new JoystickButton(operatorR, 16);
+  private final JoystickButton climberDownButton = new JoystickButton(operatorR, 14);
+  
+  private final JoystickButton intakeDumpButton = new JoystickButton(operatorL, 1);
 
-
-  private final JoystickButton intakeStopButton = new JoystickButton(operatorL, 5);
-  private final JoystickButton intakeDumpButton = new JoystickButton(operatorL, 2);
+  
 
   
   
 
   public final SwerveDrive driveSwerve;
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  
+   
+  /* 
   public final Intake inTake = new Intake();
   public final Shooter noteShooter = new Shooter();
   public final Pivot shooterPivot = new Pivot();
-  public final Climber chainClimber = new Climber();
+  public final Climber climb = new Climber();
+  */
+  
    
 
   /**
@@ -97,16 +97,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     this.driveSwerve = new SwerveDrive(driverL, driverR);
-    this.driveSwerve.setDefaultCommand(
-        new SwerveTeleOp(
-            driveSwerve,
-            driverL,
-            driverR
-            
-          )
-        );
-    //this.inTake.setDefaultCommand(new intakeSpin(inTake));
-    //this.noteShooter.setDefaultCommand(new ShooterIntake(noteShooter));
+    //this.driveSwerve.setDefaultCommand(new SwerveTeleOp(driveSwerve,driverL,driverR));
+    this.driveSwerve.setDefaultCommand(new Drive(driveSwerve, driverL, driverR, driverL.getRawAxis(0), this.driverL.getRawAxis(1), this.driverR.getRawAxis(0), false));
     configureButtonBindings();
   }
 
@@ -130,32 +122,35 @@ public class RobotContainer {
     // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
      resetYawButton.onTrue(new InstantCommand(() -> driveSwerve.zeroGyro()));
+
      
      
+     /* 
       shootButton.whileTrue(new ShootCommand(noteShooter));
       shootButton.onFalse(new intakeSpin(inTake, Constants.intakeMotorSpeed));
+
+      intakeDumpButton.whileTrue(new intakeSpin(inTake, -Constants.intakeMotorSpeed));
+      intakeDumpButton.onFalse(new intakeSpin(inTake, Constants.intakeMotorSpeed));
       
        
     intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter)));
     subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, Constants.shooterLowSpeed)).alongWith(new intakeSpin(inTake, 0)));
     ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new SpinUpAmp(noteShooter)));
     podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, Constants.shooterLowSpeed)).alongWith(new intakeSpin(inTake, 0)));
+    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(new ShooterIntake(noteShooter)).alongWith(new intakeSpin(inTake, 0)));
 
-    climberUpButton.whileTrue(new ClimberUp(chainClimber));
-    climberUp2.whileTrue(new ClimberUp(chainClimber));
-    climberUp3.whileTrue(new ClimberUp(chainClimber));
-    climberUp4.whileTrue(new ClimberUp(chainClimber));
-    climberUp5.whileTrue(new ClimberUp(chainClimber));
-    climberUp6.whileTrue(new ClimberUp(chainClimber));
+    //amp sequence: Maybe works?
 
-    climberDownButton.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
-    climberDown2.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
-    climberDown3.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
-    climberDown4.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
-    climberDown5.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
-    climberDown6.onTrue(new ClimberRightDown(chainClimber).alongWith(new ClimberLeftDown(chainClimber)));
-
+    ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new SpinUpAmp(noteShooter))).raceWith(new WaitCommand(3))).andThen((new AmpShootCommand(noteShooter)).raceWith(new WaitCommand(2))).andThen((new PivotHoldCommand(shooterPivot, Constants.intakePos)).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter))));
+*/
     
+/* 
+    climberUpButton.whileTrue(new ClimberUp(climb, Constants.climberUpSpeed));
+    climberUpButton.onFalse(new ClimberStop(climb));
+    climberBackButton.whileTrue(new ClimberUp(climb, -Constants.climberUpSpeed));
+    climberBackButton.onFalse(new ClimberStop(climb));
+    climberDownButton.onTrue((new InstantCommand(() -> climb.climbDown()).raceWith(new WaitCommand(2))).andThen((new InstantCommand(() -> climb.finalClimb())).raceWith(new WaitCommand(2))).andThen(new ClimberStop(climb)));
+    */
      
 
 
@@ -174,6 +169,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new SwerveAuto(driveSwerve);
+    //return new SwerveAuto(driveSwerve, driverL, driverR);
+    return new SwerveWeaver(driveSwerve, driverL, driverR);
   }
 }

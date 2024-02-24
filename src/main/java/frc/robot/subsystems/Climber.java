@@ -8,47 +8,102 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
+  CANSparkMax leftClimbMotor;
+  CANSparkMax rightClimbMotor;
+
+  double leftCurrent;
+  double rightCurrent;
+
+  double leftStopCurrent;
+  double rightStopCurrent;
+
+  LinearFilter leftFilter;
+  LinearFilter rightFilter;
+
+  LinearFilter leftStopFilter;
+  LinearFilter rightStopFilter;
+
+  boolean leftState;
+  boolean rightState;
+
+  Servo climberLeftServo;
+  Servo climberRightServo;
   /** Creates a new Climber. */
-  CANSparkMax climberMotorLeft;
-  CANSparkMax climberMotorRight;
-
-  boolean climberOn;
-  double climberCurrentL;
-  double climberCurrentR;
   public Climber() {
-    climberMotorLeft = new CANSparkMax(Constants.climberMotorLeftID, MotorType.kBrushless);
-    climberMotorRight = new CANSparkMax(Constants.climberMotorRightID, MotorType.kBrushless);
+    leftClimbMotor = new CANSparkMax(0, MotorType.kBrushless);
+    rightClimbMotor = new CANSparkMax(0, MotorType.kBrushless);
 
-    climberMotorLeft.setIdleMode(IdleMode.kBrake);
-    climberMotorRight.setIdleMode(IdleMode.kBrake);
+    leftClimbMotor.setIdleMode(IdleMode.kBrake);
+    rightClimbMotor.setIdleMode(IdleMode.kBrake);
 
-    climberMotorLeft.setInverted(false);
-    climberMotorRight.setInverted(false);
+    leftClimbMotor.setInverted(false);
+    rightClimbMotor.setInverted(false);
 
-    climberOn = false;
+    leftFilter = LinearFilter.movingAverage(5);
+    rightFilter = LinearFilter.movingAverage(5);
+
+    leftStopFilter = LinearFilter.movingAverage(40);
+    rightStopFilter = LinearFilter.movingAverage(40);
+
+    leftCurrent = leftFilter.calculate(leftClimbMotor.getOutputCurrent());
+    rightCurrent = rightFilter.calculate(rightClimbMotor.getOutputCurrent());
+
+    leftStopCurrent = leftStopFilter.calculate(leftClimbMotor.getOutputCurrent());
+    rightStopCurrent = rightStopFilter.calculate(rightClimbMotor.getOutputCurrent());
+
+    climberLeftServo = new Servo(Constants.climberLeftServoID);
+    climberRightServo = new Servo(Constants.climberRightServoID);
+
+    leftState = false;
+    rightState = false;
   }
 
-  public void getClimberCurrent() {
-    climberCurrentL = climberMotorLeft.getOutputCurrent();
-    climberCurrentR = climberMotorRight.getOutputCurrent();
+  public void climbUp(double speed) {
+    leftClimbMotor.set(speed);
+    rightClimbMotor.set(speed);
+
+    if (leftStopCurrent >= 12) {
+      leftClimbMotor.set(0);
+    }
+    if (rightStopCurrent >= 12) {
+      rightClimbMotor.set(0);
+    }
   }
 
-  public void climberUp(double climbSpeed) {
-    climberMotorLeft.set(climbSpeed);
-    climberMotorRight.set(climbSpeed);
+  public void climbDown() {
+    leftClimbMotor.set(Constants.climberDownSpeed);
+    rightClimbMotor.set(Constants.climberDownSpeed);
+
+    if (leftCurrent >= 12) {
+      leftClimbMotor.set(0);
+      leftState = true;
+    }
+    if (rightCurrent >= 12) {
+      rightClimbMotor.set(0);
+      rightState = true;
+    }
+
+    
 
   }
 
-  public void climberRightDown() {
-    climberMotorRight.set(climberCurrentL);
+  public void finalClimb() {
+    climberLeftServo.set(180);
+    climberRightServo.set(180);
+    leftClimbMotor.set(Constants.climberDownSpeed);
+    rightClimbMotor.set(Constants.climberDownSpeed);
   }
 
-  public void climberLeftDown() {
-
+  public void stopClimb() {
+    leftClimbMotor.set(0);
+    rightClimbMotor.set(0);
   }
 
   @Override

@@ -13,23 +13,33 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrive;
 
 public class Drive extends Command {
+  private final Joystick driverL;
+  private final Joystick driverR;
 
   private final SwerveDrive driveSwerve;
   // private final BooleanSupplier robotCentricSupply;
 
-  private final double translation;
-  private final double strafe;
-  private final double rotation;
-  private final boolean isAuto;
+  private final SlewRateLimiter translationLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(3);
 
+  private double strafeVal;
+  private double translationVal;
+  private double rotationVal;
+
+  private boolean isAuto;
   /** Creates a new SwerveTeleOp. */
-  public Drive(SwerveDrive driveSwerve, double translation, double strafe, double rotation, boolean isAuto) {
+  public Drive(SwerveDrive driveSwerve, Joystick driverL, Joystick driverR, double strafeVal, double translationVal, double rotationVal, boolean isAuto) {
     this.driveSwerve = driveSwerve;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveSwerve);
-    this.translation = translation;
-    this.strafe = strafe;
-    this.rotation = rotation;
+    this.driverL = driverL;
+    this.driverR = driverR;
+
+    this.strafeVal = strafeVal;
+    this.translationVal = translationVal;
+    this.rotationVal = rotationVal;
+
     this.isAuto = isAuto;
   }
 
@@ -40,22 +50,30 @@ public class Drive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double strafeValue;
+    double translationValue;
+    double rotationValue;
+
+    //L0, L1, R0
     if (isAuto) {
-      driveSwerve.drive(
-      new Translation2d(this.translation, this.strafe).times(Constants.maxSpeed), 
-      this.rotation * Constants.maxAngularVelocity, true, 
-      true
-    );
+    strafeValue = strafeLimiter.calculate(MathUtil.applyDeadband(strafeVal, 0.1));
+    translationValue = translationLimiter.calculate(MathUtil.applyDeadband(translationVal, 0.1));
+    rotationValue = rotationLimiter.calculate(MathUtil.applyDeadband(rotationVal, 0.1));
+    
     }
     else {
-      driveSwerve.drive(
-      new Translation2d(this.translation, this.strafe).times(Constants.maxSpeed), 
-      this.rotation * Constants.maxAngularVelocity, true, 
+    strafeValue = strafeLimiter.calculate(MathUtil.applyDeadband(this.driverL.getRawAxis(0), 0.1));
+    translationValue = translationLimiter.calculate(MathUtil.applyDeadband(this.driverL.getRawAxis(1), 0.1));
+    rotationValue = rotationLimiter.calculate(MathUtil.applyDeadband(this.driverR.getRawAxis(0), 0.1));
+
+    
+    }
+    driveSwerve.drive(
+      new Translation2d(translationValue, strafeValue).times(Constants.maxSpeed), 
+      rotationValue * Constants.maxAngularVelocity, true, 
       false
     );
-    }
     
-    // TODO: wait for wheels to turn before driving
 
   }
 

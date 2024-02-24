@@ -150,11 +150,12 @@ public class SwerveDrive extends SubsystemBase {
           "Mod " + module.moduleNumber + " Integrated", module.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + module.moduleNumber + " Velocity", module.getState().speedMetersPerSecond);
-      SmartDashboard.putNumber("Joystick1 X", this.driverL.getRawAxis(0));
-      SmartDashboard.putNumber("Joystick1 Y", this.driverL.getRawAxis(1));
-      SmartDashboard.putNumber("Joystick2 X", this.driverR.getRawAxis(0));
-      SmartDashboard.putNumber("Joystick2 Y", this.driverR.getRawAxis(1));
+      // SmartDashboard.putNumber("Joystick1 X", this.driverL.getRawAxis(0));
+      // SmartDashboard.putNumber("Joystick1 Y", this.driverL.getRawAxis(1));
+      // SmartDashboard.putNumber("Joystick2 X", this.driverR.getRawAxis(0));
+      // SmartDashboard.putNumber("Joystick2 Y", this.driverR.getRawAxis(1));
       SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees()%360);
+      SmartDashboard.putNumber("Joystick Hat", this.driverL.getPOV());
       
 
 

@@ -173,12 +173,13 @@ public class SwerveModule {
             driveMotor.set(invertDriveMotor ? driveMotorOutput * -1 : driveMotorOutput);
         }
         else {
-            //auto stuff with the feedforward loop; do it later:D  
-            double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond) + feedForward.calculate(desiredState.speedMetersPerSecond);
-            //double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+            //double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond) + feedForward.calculate(desiredState.speedMetersPerSecond);
+            double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
 
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond) + drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+
 
             driveMotor.setVoltage(invertDriveMotor ? driveAutoMotorVoltage * -1 : driveAutoMotorVoltage);
         }
