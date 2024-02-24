@@ -162,6 +162,8 @@ public class SwerveModule {
         if (isAuto) {
             new WaitCommand(2);
         }
+
+
         setSpeed(desiredState, isAuto, invertDriveMotor);
     }
     //calculate the necessary speed for the speed motor and set the motor to that speed
@@ -175,6 +177,9 @@ public class SwerveModule {
             double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond) + feedForward.calculate(desiredState.speedMetersPerSecond);
             //double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
+
+            //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond) + drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+
             driveMotor.setVoltage(invertDriveMotor ? driveAutoMotorVoltage * -1 : driveAutoMotorVoltage);
         }
 
@@ -215,6 +220,8 @@ public class SwerveModule {
         // -120 is equivalent to 60 with an inverted drive direction.
         // 120 is equivalent to -60 with an inverted drive direction.
 
+
+
         if (Math.abs(diff) > 90) {
             invertDriveMotor = true;
             if (diff < 0) {
@@ -236,7 +243,9 @@ public class SwerveModule {
         turningMotor.set(turningMotorValue);
 
         // Return the direction the drive motor is expected to go.
+
         return invertDriveMotor;
+
     }
 
     public void gogogo() {
