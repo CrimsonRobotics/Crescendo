@@ -221,8 +221,10 @@ public class SwerveModule {
         // -120 is equivalent to 60 with an inverted drive direction.
         // 120 is equivalent to -60 with an inverted drive direction.
 
-
-
+        // If the `diff` is greater than 90 or less than -90 then invert the drive motor
+        // and change the diff.
+        // -120 is equivalent to 60 with an inverted drive direction.
+        // 120 is equivalent to -60 with an inverted drive direction.
         if (Math.abs(diff) > 90) {
             invertDriveMotor = true;
             if (diff < 0) {
@@ -231,6 +233,9 @@ public class SwerveModule {
                 diff -= 180;
             }
         }
+
+
+        
 
         // If we are a degree or less off, the turning motor will not do anything, else, calculate the pid
         // values based off the diff and 0.
