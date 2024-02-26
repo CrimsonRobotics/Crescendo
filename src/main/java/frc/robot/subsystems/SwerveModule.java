@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -41,6 +42,12 @@ public class SwerveModule {
 
     private final PIDController drivePID; 
     private final PIDController turningPID;
+
+    private final LinearFilter driveVelFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
+    private final LinearFilter desiredDriveFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
+
+    private double driveVelocity;
+    private double desiredDriveVel;
 
     //feedforward loop here: will use for auto
     private final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
@@ -173,8 +180,10 @@ public class SwerveModule {
             driveMotor.set(invertDriveMotor ? driveMotorOutput * -1 : driveMotorOutput);
         }
         else {
+            driveVelocity = driveVelFilter.calculate(driveEncoder.getVelocity());
+            desiredDriveVel = desiredDriveFilter.calculate(desiredState.speedMetersPerSecond);
             //double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond) + feedForward.calculate(desiredState.speedMetersPerSecond);
-            double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
+            double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel);
 
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
 

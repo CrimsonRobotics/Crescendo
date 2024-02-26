@@ -47,7 +47,7 @@ public class SwerveWeaver extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      
+      new InstantCommand(() -> driveSwerve.resetToAbsolute2()),
       new WaitCommand(2),
       
        new InstantCommand(() -> driveSwerve.resetOdometry(newTrajectory.getInitialPose())), autoController

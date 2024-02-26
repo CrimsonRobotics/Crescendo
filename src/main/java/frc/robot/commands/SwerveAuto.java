@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -27,8 +30,11 @@ import frc.robot.subsystems.SwerveDrive;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SwerveAuto extends SequentialCommandGroup {
   /** Creates a new SwerveAuto. */
-  public SwerveAuto(SwerveDrive driveSwerve, Joystick driverL, Joystick driverR) {
+  public SwerveAuto(SwerveDrive driveSwerve, Joystick driverL, Joystick driverR, Shooter noteShooter, Intake inTake, Pivot shooterPivot) {
     
+
+
+
     // TrajectoryConfig configuration = new TrajectoryConfig(Constants.maxAutoSpeed, Constants.maxAutoAcceleration).setKinematics(Constants.SwerveMap);
 
     // Trajectory newTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(2, 0), new Translation2d(4,0)), new Pose2d(6, 0, new Rotation2d(0)), configuration);
@@ -48,9 +54,13 @@ public class SwerveAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new WaitCommand(3),
-      new Drive(driveSwerve, driverL, driverR, -.25, -.25, 0, true),
-      new WaitCommand(3),
-      new Drive(driveSwerve, driverL, driverR, .25, -.25, 0, true)
+      (new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(1)),
+      (new ShootCommand(noteShooter, Constants.shooterHighSpeed, Constants.shooterBumpSpeed).raceWith(new WaitCommand(1))),
+      //ask if okay
+      (new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(0.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(3))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed))))).raceWith(new WaitCommand(1)),
+      //new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter)),
+      new Drive(driveSwerve, driverL, driverR, 0, .5, 0, true).raceWith(new WaitCommand(1)),
+      new Drive(driveSwerve, driverL, driverR, 0, 0, 0, true).alongWith(new intakeSpin(inTake, 0)).alongWith(new ShooterIntake(noteShooter, 0))
 
       
       // new InstantCommand(() -> driveSwerve.resetOdometry(newTrajectory.getInitialPose())), autoController

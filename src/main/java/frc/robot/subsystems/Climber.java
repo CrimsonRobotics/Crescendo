@@ -37,8 +37,8 @@ public class Climber extends SubsystemBase {
   Servo climberRightServo;
   /** Creates a new Climber. */
   public Climber() {
-    leftClimbMotor = new CANSparkMax(0, MotorType.kBrushless);
-    rightClimbMotor = new CANSparkMax(0, MotorType.kBrushless);
+    leftClimbMotor = new CANSparkMax(Constants.climberMotorLeftID, MotorType.kBrushless);
+    rightClimbMotor = new CANSparkMax(Constants.climberMotorRightID, MotorType.kBrushless);
 
     leftClimbMotor.setIdleMode(IdleMode.kBrake);
     rightClimbMotor.setIdleMode(IdleMode.kBrake);
@@ -58,8 +58,8 @@ public class Climber extends SubsystemBase {
     leftStopCurrent = leftStopFilter.calculate(leftClimbMotor.getOutputCurrent());
     rightStopCurrent = rightStopFilter.calculate(rightClimbMotor.getOutputCurrent());
 
-    climberLeftServo = new Servo(Constants.climberLeftServoID);
-    climberRightServo = new Servo(Constants.climberRightServoID);
+    //climberLeftServo = new Servo(Constants.climberLeftServoID);
+    //climberRightServo = new Servo(Constants.climberRightServoID);
 
     leftState = false;
     rightState = false;
@@ -68,19 +68,20 @@ public class Climber extends SubsystemBase {
   public void climbUp(double speed) {
     leftClimbMotor.set(speed);
     rightClimbMotor.set(speed);
-
+/* 
     if (leftStopCurrent >= 12) {
       leftClimbMotor.set(0);
     }
     if (rightStopCurrent >= 12) {
       rightClimbMotor.set(0);
     }
+    */
   }
 
   public void climbDown() {
     leftClimbMotor.set(Constants.climberDownSpeed);
     rightClimbMotor.set(Constants.climberDownSpeed);
-
+/* 
     if (leftCurrent >= 12) {
       leftClimbMotor.set(0);
       leftState = true;
@@ -89,14 +90,14 @@ public class Climber extends SubsystemBase {
       rightClimbMotor.set(0);
       rightState = true;
     }
-
+*/
     
 
   }
 
   public void finalClimb() {
-    climberLeftServo.set(180);
-    climberRightServo.set(180);
+    //climberLeftServo.set(180);
+    //climberRightServo.set(180);
     leftClimbMotor.set(Constants.climberDownSpeed);
     rightClimbMotor.set(Constants.climberDownSpeed);
   }

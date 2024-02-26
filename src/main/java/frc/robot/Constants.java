@@ -28,28 +28,28 @@ public final class Constants {
 
   //Test Swerve Auto IDs and stuff
   //mod 3: FL
-  /* 
+   /* 
   public static final int mod0DriveMotor = 59;        //59    //10
   public static final int mod0TurningMotor = 55;      //55    //11
   public static final int mod0CANCoder = 7;           //3   //2
   public static final Rotation2d mod0TurningOffset = Rotation2d.fromDegrees(226.0);
-  */
+  
   //mod 0: FR
-  /* 
+   
   public static final int mod1DriveMotor = 54;       //58    //9
   public static final int mod1TurningMotor = 58;       //54    //8
   public static final int mod1CANCoder = 5;       //0       //0
   public static final Rotation2d mod1TurningOffset = Rotation2d.fromDegrees(67.3);
-  */
+  
   //mod 2: BL
-  /* 
+   
   public static final int mod2DriveMotor = 53;        //53    //12
   public static final int mod2TurningMotor = 61;        //61    //13
   public static final int mod2CANCoder = 4;         //2       //1
   public static final Rotation2d mod2TurningOffset = Rotation2d.fromDegrees(103.8);
-*/
+
 //mod 1: BR
-/* 
+ 
   public static final int mod3DriveMotor = 36;       //36    //9
   public static final int mod3TurningMotor = 52;       //52    //8
   public static final int mod3CANCoder = 6;       //1       //3
@@ -66,6 +66,7 @@ public final class Constants {
 
   //module 3 constants: Front Left    Module 0???                //MG    //PC
 
+   
   public static final int mod0DriveMotor = 37;        //59    //10
   public static final int mod0TurningMotor = 60;      //55    //11
   public static final int mod0CANCoder = 3;           //3   //2
@@ -93,7 +94,7 @@ public final class Constants {
 
 
   //PID Constants
-  public static final double drivekP = 0.005; 
+  public static final double drivekP = 0.02; 
   public static final double drivekI = 0;
   public static final double drivekD = 0;
 
@@ -129,6 +130,11 @@ public final class Constants {
   public static final double robotLength = Units.inchesToMeters(20.381); //23.625? or .675?
   public static final double robotWidth = Units.inchesToMeters(20.381);
 
+/* 
+  public static final double robotLength = Units.inchesToMeters(23.675); 
+  public static final double robotWidth = Units.inchesToMeters(23.675);
+  */
+
 
   public static final SwerveDriveKinematics SwerveMap = new SwerveDriveKinematics(
     new Translation2d(robotLength / 2, robotWidth / 2), //++
@@ -144,40 +150,52 @@ public final class Constants {
 
     public static final int intakeMotorID = 44;
 
-    public static final double intakeMotorSpeed = 1;
+    public static final double intakeMotorSpeed = .7;
 
         //Pivot Angles
 
-        public static final double intakePos = 20;
-        public static final double subwooferPos = 60;
-        public static final double ampPos = 100;
+        public static final double intakePos = 105;
+        public static final double subwooferPos = 124;
+        public static final double ampPos = 144;
         public static final double podiumPos = 32.807;
-        public static final double sourcePos = 60;
+        public static final double sourcePos = 115;
 
 
     //Shooter Constants
 
-    public static final int fastShooterMotorID = 1;
-    public static final int slowShooterMotorID = 2;
-    public static final int shooterHoldMotorID = 3;
+    public static final double alignSpeed = 0.25;
 
-    public static final int shooterPotID = 0;
+    public static final int fastShooterMotorID = 50;
+    public static final int slowShooterMotorID = 35;
+    public static final int shooterHoldMotorID = 38;
 
-    public static final double shooterkP = 1;
+    public static final int shooterPotID = 1;
+
+    public static final double shooterkP = 0.2;
     public static final double shooterkI = 0;
     public static final double shooterkD = 0;
 
-    public static final double shooterIntakeSpeed = 0;
+    public static final double shooterIntakeSpeed = 1;
 
-    public static final double shooterHighSpeed = 1;
-    public static final double shooterLowSpeed = 0.5;
+    public static final double shooterHighSpeed = 0.7;
+    public static final double shooterLowSpeed = 0.2;
     public static final double shooterBumpSpeed = 0.2;
+
+
+    //Vision Constants
+
+    public static final double cameraFOV = 42; //camera FOV in degrees
+    public static final double cameraXRez = 640; //camera horizontal resolution in pixels
+    public static final double cameraFOVRatio = cameraXRez / cameraFOV; //camera FOV in pixels
+
+    
+
      
 
 
     //Pivot Constants
 
-    public static final int pivotMotorID = 9;
+    public static final int pivotMotorID = 47;
 
     public static final double pivotkP = 1;
     public static final double pivotkI = 0;
@@ -185,29 +203,30 @@ public final class Constants {
 
 
 
+
     //Climber Constants
 
-    public static final int climberMotorLeftID = 4;
-    public static final int climberMotorRightID = 5;
+    public static final int climberMotorLeftID = 40;
+    public static final int climberMotorRightID = 29;
 
-    public static final double climberUpSpeed = 0.5;
-    public static final double climberDownSpeed = 0.3;
+    public static final double climberUpSpeed = 0.2;
+    public static final double climberDownSpeed = 0.2;
 
-    public static final int climberLeftServoID = 0;
-    public static final int climberRightServoID = 1;
+    //public static final int climberLeftServoID = 0;
+    //public static final int climberRightServoID = 1;
 
 
   //auto constants
   //change PID for testing swerve auto
-    public static final double autoTurningP = .88;
+    public static final double autoTurningP = 0.5;
     public static final double autoTurningI = 0;
     public static final double autoTurningD = 0;
 
-    public static final double autoXP = 1;
+    public static final double autoXP = 0.5;
     public static final double autoXI = 0;
     public static final double autoXD = 0;
 
-    public static final double autoYP = 1;
+    public static final double autoYP = 0.5;
     public static final double autoYI = 0;
     public static final double autoYD = 0;
 

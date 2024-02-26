@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,6 +30,7 @@ public class SwerveDrive extends SubsystemBase {
   private Field2d field;
   private final SwerveModule[] dt;
   private final PigeonIMU gyro = new PigeonIMU(10);
+  private final PIDController alignPID = new PIDController(0, 0, 0);
 
   private final Joystick driverL;
   private final Joystick driverR;
@@ -128,6 +130,10 @@ public class SwerveDrive extends SubsystemBase {
     gyro.setYaw(0);
   }
 
+  public void zeroGyroAuto() {
+    gyro.setYaw(30);
+  }
+
   public Rotation2d getYaw() {
 
     return (false)
@@ -156,6 +162,7 @@ public class SwerveDrive extends SubsystemBase {
       // SmartDashboard.putNumber("Joystick2 Y", this.driverR.getRawAxis(1));
       SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees()%360);
       SmartDashboard.putNumber("Joystick Hat", this.driverL.getPOV());
+      
       
 
 
