@@ -188,7 +188,9 @@ public final class Constants {
     public static final double cameraXRez = 640; //camera horizontal resolution in pixels
     public static final double cameraFOVRatio = cameraXRez / cameraFOV; //camera FOV in pixels
 
-    
+    public static final double alignkP = 0.2;
+
+
 
      
 

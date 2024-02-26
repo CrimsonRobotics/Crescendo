@@ -24,7 +24,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-import frc.robot.commands.SwerveAuto;
+import frc.robot.commands.CloseMidAuto;
 import frc.robot.commands.SwerveWeaver;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Drive;
@@ -179,6 +179,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return new SwerveAuto(driveSwerve, driverL, driverR);
-    return new SwerveAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
+    return new CloseMidAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
   }
 }

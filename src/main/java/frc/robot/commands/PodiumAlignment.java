@@ -36,7 +36,7 @@ public class PodiumAlignment extends Command {
   @Override
   public void execute() {
     double error = xcoord * Constants.cameraFOVRatio;
-    new Drive(driveSwerve, driverL, driverR, 0, 0, Math.signum(error)*Constants.alignSpeed, true);
+    new Drive(driveSwerve, driverL, driverR, 0, 0, this.driveSwerve.alignPID.calculate(error*Constants.cameraFOVRatio, 0), true);
 
     if (Math.abs(error) <= 5) {
       new Drive(driveSwerve, this.driverL, this.driverR, 0, 0, 0, true);

@@ -30,7 +30,7 @@ public class SwerveDrive extends SubsystemBase {
   private Field2d field;
   private final SwerveModule[] dt;
   private final PigeonIMU gyro = new PigeonIMU(10);
-  private final PIDController alignPID = new PIDController(0, 0, 0);
+  public final PIDController alignPID = new PIDController(Constants.alignkP, 0, 0);
 
   private final Joystick driverL;
   private final Joystick driverR;
@@ -130,8 +130,8 @@ public class SwerveDrive extends SubsystemBase {
     gyro.setYaw(0);
   }
 
-  public void zeroGyroAuto() {
-    gyro.setYaw(30);
+  public void zeroGyroAuto(double zeroPos) {
+    gyro.setYaw(zeroPos);
   }
 
   public Rotation2d getYaw() {
