@@ -10,7 +10,6 @@ import frc.robot.subsystems.Climber;
 public class ClimberUp extends Command {
   Climber climber;
   double speed;
-  boolean isFinished;
   /** Creates a new ClimberUp. */
   public ClimberUp(Climber climber, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,7 +21,6 @@ public class ClimberUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.isFinished = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,12 +32,11 @@ public class ClimberUp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.isFinished = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    return false;
   }
 }

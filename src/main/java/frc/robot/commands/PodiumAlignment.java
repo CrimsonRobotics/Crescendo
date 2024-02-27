@@ -35,8 +35,8 @@ public class PodiumAlignment extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error = xcoord * Constants.cameraFOVRatio;
-    new Drive(driveSwerve, driverL, driverR, 0, 0, this.driveSwerve.alignPID.calculate(error*Constants.cameraFOVRatio, 0), true);
+    double error = 0;
+    new Drive(driveSwerve, driverL, driverR, 0, 0, this.driveSwerve.alignPID.calculate(error*Constants.cameraFOVRatio, 0)*.2, true);
 
     if (Math.abs(error) <= 5) {
       new Drive(driveSwerve, this.driverL, this.driverR, 0, 0, 0, true);

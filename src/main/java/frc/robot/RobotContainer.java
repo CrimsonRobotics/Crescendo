@@ -8,6 +8,7 @@ import frc.robot.commands.AmpShootCommand;
  import frc.robot.commands.ClimberStop;
  import frc.robot.commands.ClimberUp;
 import frc.robot.commands.PivotHoldCommand;
+import frc.robot.commands.PodiumAlignment;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShooterIntake;
 import frc.robot.commands.SpinUpAmp;
@@ -29,6 +30,7 @@ import frc.robot.commands.SwerveWeaver;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -74,6 +76,8 @@ public class RobotContainer {
   
   private final JoystickButton intakeDumpButton = new JoystickButton(operatorL, 1);
 
+  private final JoystickButton alignButton = new JoystickButton(driverR, 1);
+
   
 
   
@@ -87,6 +91,7 @@ public class RobotContainer {
   public final Shooter noteShooter = new Shooter();
   public final Pivot shooterPivot = new Pivot();
   public final Climber climb = new Climber();
+  public final VisionSubsystem camera = new VisionSubsystem();
   
   
    
@@ -138,12 +143,12 @@ public class RobotContainer {
       intakeDumpButton.onFalse((new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, -Constants.shooterIntakeSpeed)));
       
        
-    intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(0.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(3))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
+    intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(0.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
-    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(2.5))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
+    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
     podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(5))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(2.5))).andThen(new ShooterIntake(noteShooter, 0.15))));
+    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, 0.15))));
 
 
 
@@ -159,6 +164,8 @@ public class RobotContainer {
     climberBackButton.whileTrue(new ClimberUp(climb, -Constants.climberUpSpeed));
     climberBackButton.onFalse(new ClimberStop(climb));
     climberDownButton.onTrue((new InstantCommand(() -> climb.climbDown()).raceWith(new WaitCommand(2))).andThen((new InstantCommand(() -> climb.finalClimb())).raceWith(new WaitCommand(2))).andThen(new ClimberStop(climb)));
+
+    alignButton.onTrue(new PodiumAlignment(driveSwerve, driverL, driverR, camera.getError()));
     
      
 

@@ -190,6 +190,8 @@ public final class Constants {
 
     public static final double alignkP = 0.2;
 
+    public static final int speakerTagID = 1;
+
 
 
      
@@ -211,8 +213,8 @@ public final class Constants {
     public static final int climberMotorLeftID = 40;
     public static final int climberMotorRightID = 29;
 
-    public static final double climberUpSpeed = 0.2;
-    public static final double climberDownSpeed = 0.2;
+    public static final double climberUpSpeed = 0.7;
+    public static final double climberDownSpeed = 0.7;
 
     //public static final int climberLeftServoID = 0;
     //public static final int climberRightServoID = 1;
