@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class PodiumAlignment extends Command {
   private final SwerveDrive driveSwerve;
@@ -15,8 +16,10 @@ public class PodiumAlignment extends Command {
   private double xcoord;
   private final Joystick driverL;
   private final Joystick driverR;
+  double error;
+  VisionSubsystem camera;
   /** Creates a new PodiumAlignment. */
-  public PodiumAlignment(SwerveDrive driveSwerve, Joystick driverL, Joystick driverR, double xcoord) {
+  public PodiumAlignment(SwerveDrive driveSwerve, Joystick driverL, Joystick driverR, double xcoord, VisionSubsystem camera) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveSwerve = driveSwerve;
     addRequirements(this.driveSwerve);
@@ -24,6 +27,8 @@ public class PodiumAlignment extends Command {
     this.driverL = driverL;
     this.driverR = driverR;
     this.xcoord = xcoord;
+    error = xcoord;
+    this.camera = camera;
   }
 
   // Called when the command is initially scheduled.
@@ -35,7 +40,7 @@ public class PodiumAlignment extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double error = 0;
+    //error = this.camera.getError();
     new Drive(driveSwerve, driverL, driverR, 0, 0, this.driveSwerve.alignPID.calculate(error*Constants.cameraFOVRatio, 0)*.2, true);
 
     if (Math.abs(error) <= 5) {

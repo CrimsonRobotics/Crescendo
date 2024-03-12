@@ -8,23 +8,31 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   
-  CANSparkMax fastShooterMotor;
-  CANSparkMax slowShooterMotor;
+  public CANSparkMax fastShooterMotor;
+  public CANSparkMax slowShooterMotor;
   CANSparkMax shooterHoldMotor;
 
 
   PIDController shooterPID;
+
+  BangBangController shooterVelocityController;
     
 
   boolean intakeState;
+
+  double shooterCurrent;
+
+  double test;
 
 
   /** Creates a new Shooter. */
@@ -34,9 +42,12 @@ public class Shooter extends SubsystemBase {
     slowShooterMotor = new CANSparkMax(Constants.slowShooterMotorID, MotorType.kBrushless);
     shooterHoldMotor = new CANSparkMax(Constants.shooterHoldMotorID, MotorType.kBrushless);
 
+    shooterVelocityController = new BangBangController();
 
-    fastShooterMotor.setIdleMode(IdleMode.kBrake);
-    slowShooterMotor.setIdleMode(IdleMode.kBrake);
+
+
+    fastShooterMotor.setIdleMode(IdleMode.kCoast);
+    slowShooterMotor.setIdleMode(IdleMode.kCoast);
     shooterHoldMotor.setIdleMode(IdleMode.kBrake);
 
     fastShooterMotor.setInverted(false);
@@ -47,6 +58,9 @@ public class Shooter extends SubsystemBase {
     shooterPID = new PIDController(Constants.shooterkP, Constants.shooterkI, Constants.shooterkD);
     shooterPID.setIntegratorRange(0, 1);
 
+    shooterCurrent = fastShooterMotor.getOutputCurrent();
+
+    test = fastShooterMotor.getEncoder().getVelocity();
 
   }
  
@@ -63,12 +77,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void spinUpShooter(double highSpeed, double lowSpeed) {
-    fastShooterMotor.set(-highSpeed);
-    slowShooterMotor.set(-highSpeed);
+    double fastSpeed = shooterVelocityController.calculate(fastShooterMotor.getEncoder().getVelocity(), -highSpeed);
+    fastShooterMotor.set(fastSpeed);
+    slowShooterMotor.set(fastSpeed);
     shooterHoldMotor.set(Constants.shooterBumpSpeed);
   }
 
   public void shootCommand(double highSpeed, double lowSpeed, double bumpSpeed) {
+    
     fastShooterMotor.set(-highSpeed);
     slowShooterMotor.set(-highSpeed);
     shooterHoldMotor.set(-bumpSpeed);
@@ -90,5 +106,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //SmartDashboard.putNumber("Shooter Current", shooterCurrent);
+    SmartDashboard.putNumber("Shooter Velocity", fastShooterMotor.getEncoder().getVelocity());
   }
 }

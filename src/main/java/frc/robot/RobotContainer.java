@@ -7,9 +7,12 @@ package frc.robot;
 import frc.robot.commands.AmpShootCommand;
  import frc.robot.commands.ClimberStop;
  import frc.robot.commands.ClimberUp;
+import frc.robot.commands.CloseLeftAuto;
 import frc.robot.commands.PivotHoldCommand;
 import frc.robot.commands.PodiumAlignment;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShootStayLeftAuto;
+import frc.robot.commands.ShootStayMidAuto;
 import frc.robot.commands.ShooterIntake;
 import frc.robot.commands.SpinUpAmp;
 import frc.robot.commands.SpinUpShooter;
@@ -26,6 +29,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 import frc.robot.commands.CloseMidAuto;
+import frc.robot.commands.CloseRightAuto;
 import frc.robot.commands.SwerveWeaver;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Drive;
@@ -67,12 +71,15 @@ public class RobotContainer {
   private final JoystickButton sourceIntakeButton = new JoystickButton(operatorR, 3);
   
   //TODO: Bind climberBackButton
-  private final JoystickButton climberBackButton = new JoystickButton(operatorL, 11);
+  //CLIMBBUTTON
+  private final JoystickButton climberSlowButton = new JoystickButton(operatorL, 11);
 //Climber up: low buttons left side, operatorL 11-16
-  private final JoystickButton climberUpButton = new JoystickButton(operatorL, 14);
+//RESETBUTTON
+  private final JoystickButton climberUpButton = new JoystickButton(operatorR, 14);
+
   
   //Climber down: low buttons right side, operatorR 11-16
-  private final JoystickButton climberDownButton = new JoystickButton(operatorR, 14);
+  private final JoystickButton climberBackButton = new JoystickButton(operatorL, 14);
   
   private final JoystickButton intakeDumpButton = new JoystickButton(operatorL, 1);
 
@@ -132,10 +139,10 @@ public class RobotContainer {
 
      
      
-      
-      shootButton.whileTrue(new ShootCommand(noteShooter, Constants.shooterHighSpeed, Constants.shooterBumpSpeed));
+      //dont like this, keep in mind while testing
+      shootButton.whileTrue(((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.75))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
       //shootButton.onFalse(new intakeSpin(inTake, Constants.intakeMotorSpeed));
-      shootButton.onFalse(new ShootCommand(noteShooter, 0, 0));
+      //shootButton.onFalse(new ShootCommand(noteShooter, shooterPivot, 0, 0, false));
 
       //intakeDumpButton.onTrue(new SpinUpShooter(noteShooter, 0.75, 0.75).alongWith(new intakeSpin(inTake, 0)));
 
@@ -143,29 +150,31 @@ public class RobotContainer {
       intakeDumpButton.onFalse((new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, -Constants.shooterIntakeSpeed)));
       
        
-    intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(0.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
+    intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(.8))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed))));
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
-    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
+    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0)).alongWith(new intakeSpin(inTake, 0))));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(5))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, 0.15))));
+    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0)).alongWith(new intakeSpin(inTake, 0))));
+    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, 0.15))));
 
 
 
     //amp sequence: Maybe works?
 
     //ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new SpinUpAmp(noteShooter)))).raceWith(new WaitCommand(4))).andThen(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
-    ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith((new ShootCommand(noteShooter, 0, 0)))).raceWith(new WaitCommand(2))).andThen((new SpinUpAmp(noteShooter)).raceWith(new WaitCommand(1))).andThen(new AmpShootCommand(noteShooter)));
+    ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)))).raceWith(new WaitCommand(1.6))).andThen((new SpinUpAmp(noteShooter)).raceWith(new WaitCommand(0.4))).andThen(new AmpShootCommand(noteShooter)));
 
     
 
-    climberUpButton.whileTrue(new ClimberUp(climb, Constants.climberUpSpeed));
-    climberUpButton.onFalse(new ClimberStop(climb));
     climberBackButton.whileTrue(new ClimberUp(climb, -Constants.climberUpSpeed));
     climberBackButton.onFalse(new ClimberStop(climb));
-    climberDownButton.onTrue((new InstantCommand(() -> climb.climbDown()).raceWith(new WaitCommand(2))).andThen((new InstantCommand(() -> climb.finalClimb())).raceWith(new WaitCommand(2))).andThen(new ClimberStop(climb)));
+    climberUpButton.whileTrue(new ClimberUp(climb, Constants.climberSlowSpeed));
+    climberUpButton.onFalse(new ClimberStop(climb));
+    climberSlowButton.whileTrue(new ClimberUp(climb, Constants.climberDownSpeed));
+    climberSlowButton.onFalse(new ClimberStop(climb));
+    //climberFastButton.onTrue((new InstantCommand(() -> climb.climbDown()).raceWith(new WaitCommand(2))).andThen((new InstantCommand(() -> climb.finalClimb())).raceWith(new WaitCommand(2))).andThen(new ClimberStop(climb)));
 
-    alignButton.onTrue(new PodiumAlignment(driveSwerve, driverL, driverR, camera.getError()));
+    //alignButton.onTrue(new PodiumAlignment(driveSwerve, driverL, driverR, camera.getError(), this.camera));
     
      
 
@@ -177,7 +186,7 @@ public class RobotContainer {
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
-
+//gyro is subwoof
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -186,6 +195,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return new SwerveAuto(driveSwerve, driverL, driverR);
+    
     return new CloseMidAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
   }
 }

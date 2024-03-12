@@ -89,8 +89,8 @@ public final class Constants {
   //module 1 constants: Back Right mod 3???
   public static final int mod3DriveMotor = 42;       //36    //9
   public static final int mod3TurningMotor = 31;       //52    //8
-  public static final int mod3CANCoder = 1;       //1       //3
-  public static final Rotation2d mod3TurningOffset = Rotation2d.fromDegrees(187.3);
+  public static final int mod3CANCoder = 8;       //1       //3
+  public static final Rotation2d mod3TurningOffset = Rotation2d.fromDegrees(336.8);
 
 
   //PID Constants
@@ -98,9 +98,9 @@ public final class Constants {
   public static final double drivekI = 0;
   public static final double drivekD = 0;
 
-  public static final double turningkP = 0.0066; //init value 1
-  public static final double turningkI = 0.0006; //init value 0.1
-  public static final double turningkD = 0.0001; //init value 0
+  public static final double turningkP = 0.00759; //init value .0066
+  public static final double turningkI = 0.00069; //init value .0006
+  public static final double turningkD = 0.0001; //init value 
 
   
 
@@ -157,8 +157,9 @@ public final class Constants {
         public static final double intakePos = 105;
         public static final double subwooferPos = 124;
         public static final double ampPos = 144;
-        public static final double podiumPos = 32.807;
+        public static final double podiumPos = 113.5;
         public static final double sourcePos = 115;
+        public static final double backshotPos = 152;
 
 
     //Shooter Constants
@@ -177,9 +178,11 @@ public final class Constants {
 
     public static final double shooterIntakeSpeed = 1;
 
-    public static final double shooterHighSpeed = 0.7;
+    public static final double shooterHighSpeed = 0.8;
     public static final double shooterLowSpeed = 0.2;
     public static final double shooterBumpSpeed = 0.2;
+
+    public static final double shooterTargetVelocity = 30;
 
 
     //Vision Constants
@@ -213,8 +216,11 @@ public final class Constants {
     public static final int climberMotorLeftID = 40;
     public static final int climberMotorRightID = 29;
 
-    public static final double climberUpSpeed = 0.7;
-    public static final double climberDownSpeed = 0.7;
+    public static final double climberUpSpeed = 0.5;
+    public static final double climberSlowSpeed = 0.5;
+    public static final double climberDownSpeed = 0.5;
+
+    //
 
     //public static final int climberLeftServoID = 0;
     //public static final int climberRightServoID = 1;
@@ -222,6 +228,11 @@ public final class Constants {
 
   //auto constants
   //change PID for testing swerve auto
+
+    public static final double autoRotateP = 0.25;
+    public static final double autoRotateI = 0;
+    public static final double autoRotateD = 0;
+
     public static final double autoTurningP = 0.5;
     public static final double autoTurningI = 0;
     public static final double autoTurningD = 0;

@@ -31,6 +31,7 @@ public class SwerveDrive extends SubsystemBase {
   private final SwerveModule[] dt;
   private final PigeonIMU gyro = new PigeonIMU(10);
   public final PIDController alignPID = new PIDController(Constants.alignkP, 0, 0);
+  public final PIDController autoPID = new PIDController(Constants.autoRotateP, 0, 0);
 
   private final Joystick driverL;
   private final Joystick driverR;

@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,6 +21,9 @@ public class Climber extends SubsystemBase {
 
   double leftCurrent;
   double rightCurrent;
+
+  double leftRawCurrent;
+  double rightRawCurrent;
 
   double leftStopCurrent;
   double rightStopCurrent;
@@ -51,6 +55,9 @@ public class Climber extends SubsystemBase {
 
     leftStopFilter = LinearFilter.movingAverage(40);
     rightStopFilter = LinearFilter.movingAverage(40);
+
+    leftRawCurrent = leftClimbMotor.getOutputCurrent();
+    rightRawCurrent = rightClimbMotor.getOutputCurrent();
 
     leftCurrent = leftFilter.calculate(leftClimbMotor.getOutputCurrent());
     rightCurrent = rightFilter.calculate(rightClimbMotor.getOutputCurrent());
@@ -98,8 +105,8 @@ public class Climber extends SubsystemBase {
   public void finalClimb() {
     //climberLeftServo.set(180);
     //climberRightServo.set(180);
-    leftClimbMotor.set(Constants.climberDownSpeed);
-    rightClimbMotor.set(Constants.climberDownSpeed);
+    //leftClimbMotor.set(Constants.climberDownSpeed);
+    //rightClimbMotor.set(Constants.climberDownSpeed);
   }
 
   public void stopClimb() {
@@ -110,5 +117,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Climber Left Current", leftRawCurrent);
+    SmartDashboard.putNumber("Climber Right Current", rightRawCurrent);
   }
 }

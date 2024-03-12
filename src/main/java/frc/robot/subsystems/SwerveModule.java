@@ -87,7 +87,7 @@ public class SwerveModule {
 
         this.driveMotor = new CANSparkMax(driveMotorId, com.revrobotics.CANSparkLowLevel.MotorType.kBrushless);
         this.driveMotor.restoreFactoryDefaults();
-        this.driveMotor.setSmartCurrentLimit(80);
+        this.driveMotor.setSmartCurrentLimit(50);
         this.driveMotor.enableVoltageCompensation(12);
         this.driveMotor.setIdleMode(com.revrobotics.CANSparkBase.IdleMode.kBrake);
         this.driveMotor.setInverted(false);

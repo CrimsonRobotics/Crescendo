@@ -33,6 +33,8 @@ public class SpinUpShooter extends Command {
   @Override
   public void execute() {
     this.shooter.spinUpShooter(highSpeed, lowSpeed);
+
+    
   }
 
   // Called once the command ends or is interrupted.
