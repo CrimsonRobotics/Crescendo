@@ -22,9 +22,11 @@ public class ChickenAuto extends SequentialCommandGroup {
   public ChickenAuto(SwerveDrive driveSwerve, Joystick driverL, Joystick driverR, Shooter noteShooter, Intake inTake, Pivot shooterPivot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
+    //TODO: Add chicken for center left note
     addCommands(
       new InstantCommand(() -> driveSwerve.zeroGyroAuto(-64)),
-      (new PivotHoldCommand(shooterPivot, Constants.backshotPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(2)),
+      (new PivotHoldCommand(shooterPivot, Constants.backshotPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(2)),
       (new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, false).raceWith(new WaitCommand(1))),
       (new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(1.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed))))).raceWith(new WaitCommand(1)),
       new Drive(driveSwerve, driverL, driverR, 0.5, 0, -0.4, false).raceWith(new WaitCommand(4)),

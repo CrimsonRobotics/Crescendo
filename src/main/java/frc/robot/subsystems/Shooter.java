@@ -42,7 +42,7 @@ public class Shooter extends SubsystemBase {
     slowShooterMotor = new CANSparkMax(Constants.slowShooterMotorID, MotorType.kBrushless);
     shooterHoldMotor = new CANSparkMax(Constants.shooterHoldMotorID, MotorType.kBrushless);
 
-    shooterVelocityController = new BangBangController();
+    //shooterVelocityController = new BangBangController(0);
 
 
 
@@ -76,11 +76,18 @@ public class Shooter extends SubsystemBase {
     
   }
 
-  public void spinUpShooter(double highSpeed, double lowSpeed) {
-    double fastSpeed = shooterVelocityController.calculate(fastShooterMotor.getEncoder().getVelocity(), -highSpeed);
-    fastShooterMotor.set(fastSpeed);
-    slowShooterMotor.set(fastSpeed);
+  public void spinUpShooter(double highSpeed, double lowSpeed, double fullSpeed) {
+    //double fastSpeed = shooterVelocityController.calculate(fastShooterMotor.getEncoder().getVelocity(), -highSpeed);
+    //double test = shooterVelocityController.cal
     shooterHoldMotor.set(Constants.shooterBumpSpeed);
+    if (fastShooterMotor.getEncoder().getVelocity()<30) {
+      fastShooterMotor.set(-fullSpeed);
+      slowShooterMotor.set(-fullSpeed);
+    }
+    else {
+      fastShooterMotor.set(-highSpeed);
+      slowShooterMotor.set(-highSpeed);
+    }
   }
 
   public void shootCommand(double highSpeed, double lowSpeed, double bumpSpeed) {

@@ -140,7 +140,9 @@ public class RobotContainer {
      
      
       //dont like this, keep in mind while testing
-      shootButton.whileTrue(((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.75))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
+      //shootButton.whileTrue(((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.75))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
+      shootButton.onTrue(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1).andThen((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.25))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
+
       //shootButton.onFalse(new intakeSpin(inTake, Constants.intakeMotorSpeed));
       //shootButton.onFalse(new ShootCommand(noteShooter, shooterPivot, 0, 0, false));
 
@@ -152,9 +154,9 @@ public class RobotContainer {
        
     intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(.8))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed))));
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
-    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0)).alongWith(new intakeSpin(inTake, 0))));
+    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0)).alongWith(new intakeSpin(inTake, 0))));
+    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))));
     sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, 0.15))));
 
 

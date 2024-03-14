@@ -49,17 +49,19 @@ public class ShootCommand extends Command {
     */
 
     if (condition) {
-      if (this.shooter.fastShooterMotor.getEncoder().getVelocity()!=Constants.shooterTargetVelocity) {
-        this.isFinished = true;
+      if (this.shooter.fastShooterMotor.getEncoder().getVelocity()<=Constants.shooterTargetVelocity) {
+        shooter.shootCommand(-this.highSpeed, -this.highSpeed, -this.kickSpeed);
       }
       else {
         shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
       }
     }
     //else {
-      shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
+      //shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
     //}
-    
+  
+    //shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
+
 
   }
 

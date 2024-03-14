@@ -13,13 +13,15 @@ public class SpinUpShooter extends Command {
   double highSpeed;
   double lowSpeed;
   boolean isFinished;
+  double fullSpeed;
   /** Creates a new SpinUpShooter. */
-  public SpinUpShooter(Shooter shooter, double highSpeed, double lowSpeed) {
+  public SpinUpShooter(Shooter shooter, double highSpeed, double lowSpeed, double fullSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
         this.shooter = shooter;
     addRequirements(this.shooter);
     this.highSpeed = highSpeed;
     this.lowSpeed = lowSpeed;
+    this.fullSpeed = fullSpeed;
     
   }
 
@@ -32,8 +34,12 @@ public class SpinUpShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooter.spinUpShooter(highSpeed, lowSpeed);
-
+    this.shooter.spinUpShooter(highSpeed, lowSpeed, fullSpeed);
+/* 
+    if (this.shooter.fastShooterMotor.getEncoder().getVelocity()==Constants.shooterTargetVelocity) {
+      this.isFinished = true;
+    }
+*/
     
   }
 
