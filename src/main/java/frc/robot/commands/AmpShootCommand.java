@@ -27,7 +27,7 @@ boolean isFinished;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooter.ampShootCommand(0.26, 0.13);
+    this.shooter.ampShootCommand(0.17, 0.08);
   }
 
   // Called once the command ends or is interrupted.

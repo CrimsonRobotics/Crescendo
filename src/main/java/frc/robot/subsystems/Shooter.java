@@ -46,17 +46,19 @@ public class Shooter extends SubsystemBase {
 
 
 
-    fastShooterMotor.setIdleMode(IdleMode.kCoast);
-    slowShooterMotor.setIdleMode(IdleMode.kCoast);
+    fastShooterMotor.setIdleMode(IdleMode.kBrake);
+    slowShooterMotor.setIdleMode(IdleMode.kBrake);
     shooterHoldMotor.setIdleMode(IdleMode.kBrake);
 
     fastShooterMotor.setInverted(false);
     slowShooterMotor.setInverted(false);
     shooterHoldMotor.setInverted(false);
 
+    fastShooterMotor.setSmartCurrentLimit(50);
+    slowShooterMotor.setSmartCurrentLimit(50);
 
-    shooterPID = new PIDController(Constants.shooterkP, Constants.shooterkI, Constants.shooterkD);
-    shooterPID.setIntegratorRange(0, 1);
+
+    
 
     shooterCurrent = fastShooterMotor.getOutputCurrent();
 
@@ -67,6 +69,8 @@ public class Shooter extends SubsystemBase {
   
 
   public void shooterIntake(double speed) {
+
+  
     
       
       fastShooterMotor.set(speed);
@@ -80,7 +84,10 @@ public class Shooter extends SubsystemBase {
     //double fastSpeed = shooterVelocityController.calculate(fastShooterMotor.getEncoder().getVelocity(), -highSpeed);
     //double test = shooterVelocityController.cal
     shooterHoldMotor.set(Constants.shooterBumpSpeed);
-    if (fastShooterMotor.getEncoder().getVelocity()<30) {
+    fastShooterMotor.set(-highSpeed);
+    slowShooterMotor.set(-highSpeed);
+    /* 
+    if (fastShooterMotor.getEncoder().getVelocity()>-4400) {
       fastShooterMotor.set(-fullSpeed);
       slowShooterMotor.set(-fullSpeed);
     }
@@ -88,6 +95,7 @@ public class Shooter extends SubsystemBase {
       fastShooterMotor.set(-highSpeed);
       slowShooterMotor.set(-highSpeed);
     }
+    */
   }
 
   public void shootCommand(double highSpeed, double lowSpeed, double bumpSpeed) {

@@ -28,7 +28,7 @@ public class ChickenAuto extends SequentialCommandGroup {
       new InstantCommand(() -> driveSwerve.zeroGyroAuto(-64)),
       (new PivotHoldCommand(shooterPivot, Constants.backshotPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(2)),
       (new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, false).raceWith(new WaitCommand(1))),
-      (new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(1.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed))))).raceWith(new WaitCommand(1)),
+      (new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(1.5).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed))))).raceWith(new WaitCommand(1)),
       new Drive(driveSwerve, driverL, driverR, 0.5, 0, -0.4, false).raceWith(new WaitCommand(4)),
       new Drive(driveSwerve, driverL, driverR, 0, 0, 0, false),
       new Drive(driveSwerve, driverL, driverR, 0, -0.5, 0, false).raceWith(new WaitCommand(4)),

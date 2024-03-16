@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
@@ -34,7 +35,7 @@ public class VisionSubsystem extends SubsystemBase {
   public VisionSubsystem() {
     camera = new PhotonCamera("C270_HD_WEBCAM");
   }
-/* 
+
   public double getError() {
     cameraFeed = camera.getLatestResult();
     targets = cameraFeed.getTargets();
@@ -51,6 +52,12 @@ public class VisionSubsystem extends SubsystemBase {
       }
     }
     return error;
+  }
+  
+/* 
+  public double getDistanceToTarget() {
+    cameraFeed = camera.getLatestResult();
+    range = PhotonUtils.calculateDistanceToTargetMeters(corner3, 1.222, corner1, 0);
   }
   */
 /* 

@@ -26,9 +26,9 @@ public class ShootStayRightAuto extends SequentialCommandGroup {
 new InstantCommand(() -> driveSwerve.zeroGyroAuto(-64)),
       (new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(2)),
       (new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, false).raceWith(new WaitCommand(1))),
-      (new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(0.5).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(3))).andThen(new ShooterIntake(noteShooter, 0))))).raceWith(new WaitCommand(1)),
+      (new PivotHoldCommand(shooterPivot, Constants.intakePos).raceWith(new WaitCommand(0.5).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(3))).andThen(new ShooterIntake(noteShooter, inTake, 0))))).raceWith(new WaitCommand(1)),
       new InstantCommand(() -> driveSwerve.zeroGyroAuto(180)),
-      new Drive(driveSwerve, driverL, driverR, 0, 0, 0, true).alongWith(new intakeSpin(inTake, 0)).alongWith(new ShooterIntake(noteShooter, 0))
+      new Drive(driveSwerve, driverL, driverR, 0, 0, 0, true).alongWith(new intakeSpin(inTake, 0)).alongWith(new ShooterIntake(noteShooter, inTake, 0))
     );
   }
 }

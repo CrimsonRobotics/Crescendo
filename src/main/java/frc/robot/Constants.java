@@ -75,8 +75,8 @@ public final class Constants {
   //module 0 constants: Front Right Module 1????
   public static final int mod1DriveMotor = 39;       //58    //9
   public static final int mod1TurningMotor = 32;       //54    //8
-  public static final int mod1CANCoder = 0;       //0       //0
-  public static final Rotation2d mod1TurningOffset = Rotation2d.fromDegrees(156.0);
+  public static final int mod1CANCoder = 1;       //0       //0
+  public static final Rotation2d mod1TurningOffset = Rotation2d.fromDegrees(97.3);
 
 
   //module 2 constants: Back Left
@@ -90,7 +90,7 @@ public final class Constants {
   public static final int mod3DriveMotor = 42;       //36    //9
   public static final int mod3TurningMotor = 31;       //52    //8
   public static final int mod3CANCoder = 8;       //1       //3
-  public static final Rotation2d mod3TurningOffset = Rotation2d.fromDegrees(336.8);
+  public static final Rotation2d mod3TurningOffset = Rotation2d.fromDegrees(156.8);
 
 
   //PID Constants
@@ -166,15 +166,12 @@ public final class Constants {
 
     public static final double alignSpeed = 0.25;
 
-    public static final int fastShooterMotorID = 50;
+    public static final int fastShooterMotorID = 41;
     public static final int slowShooterMotorID = 35;
     public static final int shooterHoldMotorID = 38;
 
     public static final int shooterPotID = 1;
 
-    public static final double shooterkP = 0.2;
-    public static final double shooterkI = 0;
-    public static final double shooterkD = 0;
 
     public static final double shooterIntakeSpeed = 1;
 
@@ -182,7 +179,7 @@ public final class Constants {
     public static final double shooterLowSpeed = 0.2;
     public static final double shooterBumpSpeed = 0.2;
 
-    public static final double shooterTargetVelocity = 30;
+    public static final double shooterTargetVelocity = -4400;
 
 
     //Vision Constants

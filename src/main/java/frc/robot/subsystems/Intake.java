@@ -17,7 +17,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   
   CANSparkMax intakeMotor;
-  DigitalInput shooterLimitSwitch;
+  public DigitalInput shooterLimitSwitch;
   DigitalOutput led0;
   
   /** Creates a new Intake. */

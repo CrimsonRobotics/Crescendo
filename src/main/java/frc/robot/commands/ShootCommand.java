@@ -47,7 +47,7 @@ public class ShootCommand extends Command {
      }
     }
     */
-
+/* 
     if (condition) {
       if (this.shooter.fastShooterMotor.getEncoder().getVelocity()<=Constants.shooterTargetVelocity) {
         shooter.shootCommand(-this.highSpeed, -this.highSpeed, -this.kickSpeed);
@@ -55,15 +55,17 @@ public class ShootCommand extends Command {
       else {
         shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
       }
+     */
+        shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
+
     }
     //else {
       //shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
     //}
   
-    //shooter.shootCommand(this.highSpeed, this.highSpeed, this.kickSpeed);
 
 
-  }
+  
 
   // Called once the command ends or is interrupted.
   @Override

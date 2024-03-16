@@ -140,31 +140,32 @@ public class RobotContainer {
      
      
       //dont like this, keep in mind while testing
-      //shootButton.whileTrue(((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.75))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
-      shootButton.onTrue(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1).andThen((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.25))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
+      shootButton.onTrue(((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.75))).andThen((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).alongWith(new PivotHoldCommand(shooterPivot, Constants.intakePos)).raceWith(new WaitCommand(0.5))).andThen((new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed))));
+      //shootButton.onTrue(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1).andThen((new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, true)).raceWith(new WaitCommand(0.25))).andThen(new ShootCommand(noteShooter, shooterPivot, 0, 0, false)));
 
       //shootButton.onFalse(new intakeSpin(inTake, Constants.intakeMotorSpeed));
       //shootButton.onFalse(new ShootCommand(noteShooter, shooterPivot, 0, 0, false));
 
       //intakeDumpButton.onTrue(new SpinUpShooter(noteShooter, 0.75, 0.75).alongWith(new intakeSpin(inTake, 0)));
 
-      intakeDumpButton.whileTrue((new intakeSpin(inTake, -Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, -Constants.shooterIntakeSpeed)));
-      intakeDumpButton.onFalse((new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, -Constants.shooterIntakeSpeed)));
+      intakeDumpButton.whileTrue((new intakeSpin(inTake, -Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, inTake, -Constants.shooterIntakeSpeed)));
+      intakeDumpButton.onFalse((new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, inTake, -Constants.shooterIntakeSpeed)));
       
        
-    intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(.8))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed))));
+    intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed)));
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
-    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))));
+    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(0.75))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))));
-    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)).raceWith(new WaitCommand(1.5))).andThen(new ShooterIntake(noteShooter, 0.15))));
+    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
+    sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(new ShooterIntake(noteShooter, inTake, 0.15)));
 
 
 
     //amp sequence: Maybe works?
 
     //ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new SpinUpAmp(noteShooter)))).raceWith(new WaitCommand(4))).andThen(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
-    ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith((new ShootCommand(noteShooter, shooterPivot, 0, 0, false)))).raceWith(new WaitCommand(1.6))).andThen((new SpinUpAmp(noteShooter)).raceWith(new WaitCommand(0.4))).andThen(new AmpShootCommand(noteShooter)));
+    //ampPositionButton.onTrue((((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith((new SpinUpAmp(noteShooter)).raceWith(new WaitCommand(1.5)))).andThen(new AmpShootCommand(noteShooter)))));
+    ampPositionButton.onTrue((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).raceWith(new WaitCommand(1.9))).andThen(new AmpShootCommand(noteShooter)));
 
     
 
