@@ -5,7 +5,8 @@
 package frc.robot;
 
 import frc.robot.commands.AmpShootCommand;
- import frc.robot.commands.ClimberStop;
+import frc.robot.commands.TwoNoteMidAuto;
+import frc.robot.commands.ClimberStop;
  import frc.robot.commands.ClimberUp;
 import frc.robot.commands.CloseLeftAuto;
 import frc.robot.commands.PivotHoldCommand;
@@ -199,6 +200,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return new SwerveAuto(driveSwerve, driverL, driverR);
     
-    return new CloseMidAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
+    return new TwoNoteMidAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
   }
 }

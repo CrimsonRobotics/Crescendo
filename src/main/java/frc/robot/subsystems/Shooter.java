@@ -84,9 +84,9 @@ public class Shooter extends SubsystemBase {
     //double fastSpeed = shooterVelocityController.calculate(fastShooterMotor.getEncoder().getVelocity(), -highSpeed);
     //double test = shooterVelocityController.cal
     shooterHoldMotor.set(Constants.shooterBumpSpeed);
-    fastShooterMotor.set(-highSpeed);
-    slowShooterMotor.set(-highSpeed);
-    /* 
+    //fastShooterMotor.set(-highSpeed);
+    //slowShooterMotor.set(-highSpeed);
+     
     if (fastShooterMotor.getEncoder().getVelocity()>-4400) {
       fastShooterMotor.set(-fullSpeed);
       slowShooterMotor.set(-fullSpeed);
@@ -95,7 +95,7 @@ public class Shooter extends SubsystemBase {
       fastShooterMotor.set(-highSpeed);
       slowShooterMotor.set(-highSpeed);
     }
-    */
+    
   }
 
   public void shootCommand(double highSpeed, double lowSpeed, double bumpSpeed) {

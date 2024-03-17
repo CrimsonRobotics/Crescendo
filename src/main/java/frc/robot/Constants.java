@@ -159,7 +159,7 @@ public final class Constants {
         public static final double ampPos = 144;
         public static final double podiumPos = 113.5;
         public static final double sourcePos = 115;
-        public static final double backshotPos = 152;
+        public static final double backshotPos = 147;
 
 
     //Shooter Constants
@@ -202,7 +202,7 @@ public final class Constants {
     public static final int pivotMotorID = 47;
 
     public static final double pivotkP = 1;
-    public static final double pivotkI = 0;
+    public static final double pivotkI = 0.1;
     public static final double pivotkD = 0;
 
 

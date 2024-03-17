@@ -117,7 +117,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Climber Left Current", leftRawCurrent);
-    SmartDashboard.putNumber("Climber Right Current", rightRawCurrent);
+    SmartDashboard.putNumber("Climber Left Current", leftClimbMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Climber Right Current", rightClimbMotor.getOutputCurrent());
   }
 }
