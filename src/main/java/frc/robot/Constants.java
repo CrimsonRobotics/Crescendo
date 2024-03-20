@@ -155,11 +155,11 @@ public final class Constants {
         //Pivot Angles
 
         public static final double intakePos = 105;
-        public static final double subwooferPos = 124;
+        public static final double subwooferPos = 121.5;
         public static final double ampPos = 144;
         public static final double podiumPos = 113.5;
         public static final double sourcePos = 115;
-        public static final double backshotPos = 147;
+        public static final double backshotPos = 146;
 
 
     //Shooter Constants
@@ -201,9 +201,9 @@ public final class Constants {
 
     public static final int pivotMotorID = 47;
 
-    public static final double pivotkP = 1;
-    public static final double pivotkI = 0.1;
-    public static final double pivotkD = 0;
+    public static final double pivotkP = .9; //1.1
+    public static final double pivotkI = .35; //.12
+    public static final double pivotkD = 0.05;
 
 
 

@@ -54,6 +54,8 @@ public class Drive extends Command {
     double translationValue;
     double rotationValue;
 
+    
+
     //L0, L1, R0
     if (isAuto) {
     strafeValue = strafeLimiter.calculate(MathUtil.applyDeadband(strafeVal, 0.1));

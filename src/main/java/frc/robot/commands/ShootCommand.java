@@ -47,6 +47,8 @@ public class ShootCommand extends Command {
      }
     }
     */
+
+    
 /* 
     if (condition) {
       if (this.shooter.fastShooterMotor.getEncoder().getVelocity()<=Constants.shooterTargetVelocity) {

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -20,6 +21,10 @@ public class Robot extends TimedRobot {
   public static CTREConfigs ctreConfigs;
 
   public static RobotContainer m_robotContainer;
+  // DigitalOutput led0;
+  // DigitalOutput led1;
+  // DigitalOutput led2;
+  // DigitalOutput led3;
 
   
 
@@ -36,6 +41,11 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     ctreConfigs = new CTREConfigs();
     m_robotContainer = new RobotContainer();
+
+  //   led0 = new DigitalOutput(10);
+  // led1 = new DigitalOutput(11);
+  // led2 = new DigitalOutput(12);
+  // led3 = new DigitalOutput(13);
 
 
   }
@@ -89,6 +99,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // led0.set(false);
+    //   led1.set(false);
+    //   led2.set(true);
+    //   led3.set(true);
 
 
     

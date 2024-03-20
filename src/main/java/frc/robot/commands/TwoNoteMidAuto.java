@@ -25,7 +25,7 @@ public class TwoNoteMidAuto extends SequentialCommandGroup {
       (new PivotHoldCommand(shooterPivot, Constants.backshotPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(1.5)),
       (new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, false).raceWith(new WaitCommand(0.5))),
       (new ShootCommand(noteShooter, shooterPivot, 0, 0, false).alongWith(new PivotHoldCommand(shooterPivot, Constants.intakePos))).raceWith(new WaitCommand(1)),
-      ((new intakeSpin(inTake, Constants.intakeMotorSpeed).alongWith(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed)))).raceWith(new WaitCommand(2)),
+      ((new intakeSpin(inTake, Constants.intakeMotorSpeed).alongWith(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed)))).raceWith(new WaitCommand(0.5)),
       (new Drive(driveSwerve, driverL, driverR, 0, -.5, 0, true).alongWith(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed))).raceWith(new WaitCommand(1.1)),
       new Drive(driveSwerve, driverL, driverR, 0, 0, 0, true).raceWith(new WaitCommand(0.25)),
       new Drive(driveSwerve, driverL, driverR, 0, .5, 0, true).raceWith(new WaitCommand(1.2)),

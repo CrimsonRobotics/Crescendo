@@ -19,6 +19,9 @@ public class Intake extends SubsystemBase {
   CANSparkMax intakeMotor;
   public DigitalInput shooterLimitSwitch;
   DigitalOutput led0;
+  DigitalOutput led1;
+  DigitalOutput led2;
+  DigitalOutput led3;
   
   /** Creates a new Intake. */
   public Intake() {
@@ -26,9 +29,12 @@ public class Intake extends SubsystemBase {
   intakeMotor.setIdleMode(IdleMode.kBrake);
   intakeMotor.setInverted(false);
 
-  shooterLimitSwitch = new DigitalInput(0);
+  shooterLimitSwitch = new DigitalInput(4);
 
-  //led0 = new DigitalOutput(0);
+  led0 = new DigitalOutput(10);
+  led1 = new DigitalOutput(11);
+  led2 = new DigitalOutput(12);
+  led3 = new DigitalOutput(13);
 
   
   }
@@ -37,11 +43,9 @@ public class Intake extends SubsystemBase {
   public void intakeSpin(double speed) {
     if (shooterLimitSwitch.get() == false) {
       intakeMotor.set(0);
-      //led0.set(true);
     }
     else {
     intakeMotor.set(speed);
-      //led0.set(false);
     }
   }
 
@@ -49,5 +53,18 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //SmartDashboard.putBoolean("Bottom Limit Switch", shooterLimitSwitch.get());
+    if (shooterLimitSwitch.get()==false) {
+      led0.set(true);
+      led1.set(true);
+      led2.set(true);
+      led3.set(false);
+     
+    }
+     else {
+        led0.set(false);
+        led1.set(false);
+        led2.set(true);
+        led3.set(true);
+      }
   }
 }

@@ -32,6 +32,8 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.commands.CloseMidAuto;
 import frc.robot.commands.CloseRightAuto;
 import frc.robot.commands.SwerveWeaver;
+import frc.robot.commands.ThreeNoteLeftAuto;
+import frc.robot.commands.TwoNoteLeftAuto;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.SwerveDrive;
@@ -157,7 +159,7 @@ public class RobotContainer {
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
     subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
+    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, 0.6, 0, 0.8)).alongWith(new intakeSpin(inTake, 0)));
     sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(new ShooterIntake(noteShooter, inTake, 0.15)));
 
 
@@ -200,6 +202,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return new SwerveAuto(driveSwerve, driverL, driverR);
     
-    return new TwoNoteMidAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
+    return new ThreeNoteLeftAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
   }
 }

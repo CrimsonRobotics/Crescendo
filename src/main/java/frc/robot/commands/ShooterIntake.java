@@ -47,6 +47,7 @@ public class ShooterIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     this.isFinished = true;
+    this.shooter.shooterIntake(0);
   }
 
   // Returns true when the command should end.
