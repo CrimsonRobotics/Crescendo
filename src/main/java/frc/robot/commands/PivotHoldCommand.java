@@ -9,6 +9,7 @@ import javax.sound.sampled.Line;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
 
@@ -41,6 +42,8 @@ public class PivotHoldCommand extends Command {
 
     double motorSpeed = MathUtil.clamp(this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position), -100, 100);
     motorSpeed /= 100;
+    // double motorSpeed = this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position)+this.pivot.calcFeedforward();
+    // SmartDashboard.putNumber("DesiredPos", position);
     this.pivot.setSpeed(motorSpeed);
   }
 

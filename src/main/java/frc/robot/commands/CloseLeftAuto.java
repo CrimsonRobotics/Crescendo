@@ -24,7 +24,7 @@ public class CloseLeftAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
 
-      new InstantCommand(() -> driveSwerve.zeroGyroAuto(56)),
+      new InstantCommand(() -> driveSwerve.zeroGyroAuto(236)),
       (new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0))).raceWith(new WaitCommand(2)),
       (new ShootCommand(noteShooter, shooterPivot, Constants.shooterHighSpeed, Constants.shooterBumpSpeed, false).raceWith(new WaitCommand(1))),
       //ask if okay

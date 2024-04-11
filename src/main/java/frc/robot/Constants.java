@@ -20,7 +20,8 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
-  //PC Specs: 26.5 in
+  //PC Specs: 26.5 in 
+  //
 
   //Maybe need maxVolts later?
 
@@ -150,16 +151,25 @@ public final class Constants {
 
     public static final int intakeMotorID = 44;
 
-    public static final double intakeMotorSpeed = .7;
+    public static final double intakeMotorSpeed = 1;
 
-        //Pivot Angles
+        //Pivot Angles -3
 
-        public static final double intakePos = 105;
-        public static final double subwooferPos = 121.5;
-        public static final double ampPos = 144;
-        public static final double podiumPos = 113.5;
-        public static final double sourcePos = 115;
-        public static final double backshotPos = 146;
+        public static final double intakePos = 73; //102 original
+        public static final double subwooferPos = intakePos+15.5;
+        public static final double ampPos = intakePos+39;
+        public static final double podiumPos = intakePos+8.5;
+        public static final double sourcePos = intakePos+10;
+        public static final double backshotPos = intakePos+39.75;
+
+
+        //test values
+        // public static final double intakePos = 103.5;
+        // public static final double subwooferPos = 118;
+        // public static final double ampPos = 141.5;
+        // public static final double podiumPos = 114.5;
+        // public static final double sourcePos = 113;
+        // public static final double backshotPos = 142.5;
 
 
     //Shooter Constants
@@ -173,7 +183,7 @@ public final class Constants {
     public static final int shooterPotID = 1;
 
 
-    public static final double shooterIntakeSpeed = 1;
+    public static final double shooterIntakeSpeed = 0.5;
 
     public static final double shooterHighSpeed = 0.8;
     public static final double shooterLowSpeed = 0.2;
@@ -201,9 +211,26 @@ public final class Constants {
 
     public static final int pivotMotorID = 47;
 
-    public static final double pivotkP = .9; //1.1
-    public static final double pivotkI = .35; //.12
+    //test values
+    // public static final double pivotkP = 1.5;
+    // public static final double pivotkI = .2;
+    // public static final double pivotkD = 0.6;
+
+  //match values
+
+    // public static final double pivotkP = .007; 
+    // public static final double pivotkI = 0;
+    // public static final double pivotkD = 0.002;
+
+    public static final double pivotkP = 1.1; 
+    public static final double pivotkI = 0.2;
     public static final double pivotkD = 0.05;
+
+
+    public static final double pivotZeroValue = 177.2;
+    public static final double pivotNinetyValue = 133.7;
+
+    public static final double pivotPotToDegrees = (177.2-133.7)/90;
 
 
 

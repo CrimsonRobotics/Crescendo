@@ -9,7 +9,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +24,10 @@ public class Pivot extends SubsystemBase {
   public AnalogPotentiometer pivotPot;
 
   public PIDController pivotPID;
+
+
+
+  public SimpleMotorFeedforward pivotFF;
 
   
 
@@ -40,15 +46,28 @@ public class Pivot extends SubsystemBase {
 
     filter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
+
   }
 
   public void setSpeed(double speed) {
     pivotMotor.set(speed);
   }
 
+  public double toDegrees() {
+      double pivotPotInDegrees = (Constants.pivotZeroValue-pivotPot.get())/Constants.pivotPotToDegrees;
+      return pivotPotInDegrees;
+  }
+
+  public double calcFeedforward() {
+    return -.05*Math.cos(Units.degreesToRadians(toDegrees()));
+    
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
         SmartDashboard.putNumber("Pivot Pot Readout", pivotPot.get());
+        SmartDashboard.putNumber("Pivot Pot Velocity", pivotMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("PivotPotSpeed", pivotMotor.get());
   }
 }
