@@ -9,6 +9,7 @@ import javax.sound.sampled.Line;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Pivot;
 
@@ -32,6 +33,7 @@ public class PivotHoldCommand extends Command {
   @Override
   public void initialize() {
     this.isFinished = false;
+    this.pivot.pivotPID.reset(this.pivot.pivotPot.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,8 +41,10 @@ public class PivotHoldCommand extends Command {
   public void execute() {
     double shooterPivotValue = this.pivot.pivotPot.get();
 
-    double motorSpeed = MathUtil.clamp(this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position), -100, 100);
-    motorSpeed /= 100;
+    // double motorSpeed = MathUtil.clamp(this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position), -100, 100);
+    // motorSpeed /= 100;
+    double motorSpeed = this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position)+this.pivot.calcFeedforward();
+    SmartDashboard.putNumber("DesiredPos", this.pivot.pivotPID.getSetpoint().position);
     this.pivot.setSpeed(motorSpeed);
   }
 

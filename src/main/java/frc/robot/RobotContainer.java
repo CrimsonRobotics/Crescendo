@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.AmpShootCommand;
 import frc.robot.commands.TwoNoteMidAuto;
+import frc.robot.commands.TwoNoteAmpSideAuto;
 import frc.robot.commands.ClimberStop;
  import frc.robot.commands.ClimberUp;
 import frc.robot.commands.CloseLeftAuto;
@@ -14,6 +15,7 @@ import frc.robot.commands.PodiumAlignment;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShootStayLeftAuto;
 import frc.robot.commands.ShootStayMidAuto;
+import frc.robot.commands.ShootStayRightAuto;
 import frc.robot.commands.ShooterIntake;
 import frc.robot.commands.SpinUpAmp;
 import frc.robot.commands.SpinUpShooter;
@@ -36,6 +38,7 @@ import frc.robot.commands.ThreeNoteLeftAuto;
 import frc.robot.commands.TwoNoteLeftAuto;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Drive;
+import frc.robot.commands.PickAndLeaveAmpAuto;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -159,7 +162,7 @@ public class RobotContainer {
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
     subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
-    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, 0.6, 0, 0.8)).alongWith(new intakeSpin(inTake, 0)));
+    podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, 0.4, 0, 0.4)).alongWith(new intakeSpin(inTake, 0)));
     sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(new ShooterIntake(noteShooter, inTake, 0.15)));
 
 
@@ -202,6 +205,6 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return new SwerveAuto(driveSwerve, driverL, driverR);
     
-    return new ThreeNoteLeftAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
+    return new ShootStayMidAuto(driveSwerve, driverL, driverR, noteShooter, inTake, shooterPivot);
   }
 }
