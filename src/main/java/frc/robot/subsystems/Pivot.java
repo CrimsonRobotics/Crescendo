@@ -4,11 +4,14 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.util.Units;
@@ -17,6 +20,8 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 
 public class Pivot extends SubsystemBase {
   CANSparkMax pivotMotor;
@@ -29,7 +34,11 @@ public class Pivot extends SubsystemBase {
 
   public SimpleMotorFeedforward pivotFF;
 
+  public TrapezoidProfile.Constraints m_constraints;
   
+  public ProfiledPIDController m_controller;
+
+  public ArmFeedforward pivot_feed_forward;
 
   LinearFilter filter;
   /** Creates a new Pivot. */
@@ -46,11 +55,17 @@ public class Pivot extends SubsystemBase {
 
     filter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
-
+    m_constraints = new TrapezoidProfile.Constraints(20,25);
+    m_controller = new ProfiledPIDController(Constants.pivotkP, Constants.pivotkI, Constants.pivotkD, m_constraints);
+    pivot_feed_forward = new ArmFeedforward(Constants.pivotkS, Constants.pivotkG, Constants.pivotkV);
   }
 
   public void setSpeed(double speed) {
     pivotMotor.set(speed);
+  }
+
+  public void setVolt(double volts) {
+    pivotMotor.setVoltage(volts);
   }
 
   public double toDegrees() {

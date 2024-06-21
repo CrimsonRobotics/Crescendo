@@ -157,7 +157,7 @@ public final class Constants {
 
         public static final double intakePos = 73; //102 original
         public static final double subwooferPos = intakePos+15.5;
-        public static final double ampPos = intakePos+39;
+        public static final double ampPos = intakePos+26;
         public static final double podiumPos = intakePos+8.5;
         public static final double sourcePos = intakePos+10;
         public static final double backshotPos = intakePos+39.75;
@@ -225,6 +225,10 @@ public final class Constants {
     public static final double pivotkP = 1.1; 
     public static final double pivotkI = 0.2;
     public static final double pivotkD = 0.05;
+
+    public static final double pivotkS = 0; 
+    public static final double pivotkG = 0.05;
+    public static final double pivotkV = 0;
 
 
     public static final double pivotZeroValue = 177.2;

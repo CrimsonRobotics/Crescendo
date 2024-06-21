@@ -11,6 +11,8 @@ import frc.robot.commands.ClimberStop;
  import frc.robot.commands.ClimberUp;
 import frc.robot.commands.CloseLeftAuto;
 import frc.robot.commands.PivotHoldCommand;
+import frc.robot.commands.PivotOff;
+import frc.robot.commands.PivotVoltSet;
 import frc.robot.commands.PodiumAlignment;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShootStayLeftAuto;
@@ -75,6 +77,8 @@ public class RobotContainer {
   private final JoystickButton ampShootButton = new JoystickButton(operatorL, 1);
   private final JoystickButton podiumPositionButton = new JoystickButton(operatorL, 4);
   private final JoystickButton sourceIntakeButton = new JoystickButton(operatorR, 3);
+  private final JoystickButton FeedForwardButton = new JoystickButton(driverR, 3);
+  private final JoystickButton FeedOffButton = new JoystickButton(driverR, 4);
   
   //TODO: Bind climberBackButton
   //CLIMBBUTTON
@@ -102,7 +106,7 @@ public class RobotContainer {
   
   public final Intake inTake = new Intake();
   public final Shooter noteShooter = new Shooter();
-  public final Pivot shooterPivot = new Pivot();
+  public final  Pivot shooterPivot = new Pivot();
   public final Climber climb = new Climber();
   public final VisionSubsystem camera = new VisionSubsystem();
   
@@ -160,18 +164,19 @@ public class RobotContainer {
        
     intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(new ShooterIntake(noteShooter, inTake, Constants.shooterIntakeSpeed)));
     //intakePositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.intakePos));
-    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
+    //subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos).alongWith(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0, 1)).alongWith(new intakeSpin(inTake, 0)));
     //ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1))).andThen(new SpinUpShooter(noteShooter, Constants.shooterHighSpeed, 0))));
     podiumPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.podiumPos).alongWith(new SpinUpShooter(noteShooter, 0.4, 0, 0.4)).alongWith(new intakeSpin(inTake, 0)));
     sourceIntakeButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.sourcePos).alongWith(new ShooterIntake(noteShooter, inTake, 0.15)));
 
-
+    subwooferPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.subwooferPos));
+    ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos));
 
     //amp sequence: Maybe works?
 
     //ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new SpinUpAmp(noteShooter)))).raceWith(new WaitCommand(4))).andThen(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
     //ampPositionButton.onTrue((((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith((new SpinUpAmp(noteShooter)).raceWith(new WaitCommand(1.5)))).andThen(new AmpShootCommand(noteShooter)))));
-    ampPositionButton.onTrue((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).raceWith(new WaitCommand(1.9))).andThen(new AmpShootCommand(noteShooter)));
+    //ampPositionButton.onTrue((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).raceWith(new WaitCommand(1.9))).andThen(new AmpShootCommand(noteShooter)));
 
     
 
@@ -187,7 +192,10 @@ public class RobotContainer {
     
      
 
-
+    //Feed Forward Button
+    FeedForwardButton.onTrue(new PivotVoltSet(shooterPivot, Constants.ampPos));
+    //FeedForwardButton.onFalse(new PivotOff(shooterPivot));
+    
 
     
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
