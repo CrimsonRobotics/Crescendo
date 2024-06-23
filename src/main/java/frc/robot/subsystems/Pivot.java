@@ -53,12 +53,12 @@ public class Pivot extends SubsystemBase {
   public void setSpeed(double speed) {
     pivotMotor.set(speed);
   }
-
+//converts pot degrees to actual degrees
   public double toDegrees() {
       double pivotPotInDegrees = (Constants.pivotZeroValue-pivotPot.get())/Constants.pivotPotToDegrees;
       return pivotPotInDegrees;
   }
-
+//calculates motor power for gravity control feedforward based on the position of the arm, hence the cosine
   public double calcFeedforward() {
     return -.05*Math.cos(Units.degreesToRadians(toDegrees()));
     

@@ -50,6 +50,8 @@ public class Climber extends SubsystemBase {
     leftClimbMotor.setInverted(false);
     rightClimbMotor.setInverted(false);
 
+    //ignore everything below here
+
     leftFilter = LinearFilter.movingAverage(5);
     rightFilter = LinearFilter.movingAverage(5);
 
@@ -102,7 +104,7 @@ public class Climber extends SubsystemBase {
 
   }
 
-  public void finalClimb() {
+  public void finalClimb() { //did not use
     //climberLeftServo.set(180);
     //climberRightServo.set(180);
     //leftClimbMotor.set(Constants.climberDownSpeed);

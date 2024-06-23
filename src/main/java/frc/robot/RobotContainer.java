@@ -171,14 +171,16 @@ public class RobotContainer {
 
     //ampPositionButton.onTrue(((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(1.5))).andThen(new SpinUpAmp(noteShooter)))).raceWith(new WaitCommand(4))).andThen(new PivotHoldCommand(shooterPivot, Constants.intakePos).alongWith(new intakeSpin(inTake, Constants.intakeMotorSpeed)).alongWith(((new ShootCommand(noteShooter, 0, 0)).raceWith(new WaitCommand(5))).andThen(new ShooterIntake(noteShooter, Constants.shooterIntakeSpeed)))));
     //ampPositionButton.onTrue((((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).alongWith((new SpinUpAmp(noteShooter)).raceWith(new WaitCommand(1.5)))).andThen(new AmpShootCommand(noteShooter)))));
-    ampPositionButton.onTrue((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).raceWith(new WaitCommand(1.9))).andThen(new AmpShootCommand(noteShooter)));
+    //ampPositionButton.onTrue((new PivotHoldCommand(shooterPivot, Constants.ampPos).alongWith(new intakeSpin(inTake, 0)).raceWith(new WaitCommand(1.9))).andThen(new AmpShootCommand(noteShooter)));
+    ampPositionButton.onTrue(new PivotHoldCommand(shooterPivot, Constants.ampPos));
 
     
-
+    //one button climbs, and the other resets the climber when in pits. I don't remember which one, and my labels are completely off
     climberBackButton.whileTrue(new ClimberUp(climb, -Constants.climberUpSpeed));
     climberBackButton.onFalse(new ClimberStop(climb));
     climberUpButton.whileTrue(new ClimberUp(climb, Constants.climberSlowSpeed));
     climberUpButton.onFalse(new ClimberStop(climb));
+    //did not use
     climberSlowButton.whileTrue(new ClimberUp(climb, Constants.climberDownSpeed));
     climberSlowButton.onFalse(new ClimberStop(climb));
     //climberFastButton.onTrue((new InstantCommand(() -> climb.climbDown()).raceWith(new WaitCommand(2))).andThen((new InstantCommand(() -> climb.finalClimb())).raceWith(new WaitCommand(2))).andThen(new ClimberStop(climb)));

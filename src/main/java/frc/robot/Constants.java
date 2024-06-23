@@ -156,7 +156,8 @@ public final class Constants {
 
         public static final double intakePos = 73;
         public static final double subwooferPos = intakePos+15.5;
-        public static final double ampPos = intakePos+39;
+        //public static final double ampPos = intakePos+39;
+        public static final double ampPos = intakePos+15.5;
         public static final double podiumPos = intakePos+8.5;
         public static final double sourcePos = intakePos+10;
         public static final double backshotPos = intakePos+39.75;

@@ -43,7 +43,8 @@ public class PivotHoldCommand extends Command {
 
     // double motorSpeed = MathUtil.clamp(this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position), -100, 100);
     // motorSpeed /= 100;
-    double motorSpeed = this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position)+this.pivot.calcFeedforward();
+    //double motorSpeed = this.pivot.pivotPID.calculate(this.filter.calculate(shooterPivotValue), position)+this.pivot.calcFeedforward();
+    double motorSpeed = this.pivot.calcFeedforward();
     SmartDashboard.putNumber("DesiredPos", this.pivot.pivotPID.getSetpoint().position);
     this.pivot.setSpeed(motorSpeed);
   }

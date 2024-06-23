@@ -33,7 +33,7 @@ public class ShooterIntake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+//turns off the intake motors if the note is in the robot
     if (this.intake.shooterLimitSwitch.get()==false) {
       shooter.shooterIntake(0);
     }

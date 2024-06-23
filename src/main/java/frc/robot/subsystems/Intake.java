@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
   
   }
 
-  
+  //turns off the intake motors when there is a note in the robot
   public void intakeSpin(double speed) {
     if (shooterLimitSwitch.get() == false) {
       intakeMotor.set(0);
@@ -53,6 +53,8 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //SmartDashboard.putBoolean("Bottom Limit Switch", shooterLimitSwitch.get());
+
+    //sets the LEDs to rainbow *woah* when the limit switch gets pressed, and off otherwise
     if (shooterLimitSwitch.get()==false) {
       led0.set(true);
       led1.set(true);

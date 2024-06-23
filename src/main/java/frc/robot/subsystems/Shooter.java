@@ -86,7 +86,11 @@ public class Shooter extends SubsystemBase {
     shooterHoldMotor.set(Constants.shooterBumpSpeed);
     //fastShooterMotor.set(-highSpeed);
     //slowShooterMotor.set(-highSpeed);
-     
+
+
+    //fake bangbang! if the shooter speed is currently below the threshold velocity, 
+    //the motors will run at full power until the desired speed is reached again, then
+    // run at a more stable speed until velocity dips again 
     if (fastShooterMotor.getEncoder().getVelocity()>-4400) {
       fastShooterMotor.set(-fullSpeed);
       slowShooterMotor.set(-fullSpeed);
@@ -98,18 +102,20 @@ public class Shooter extends SubsystemBase {
     
   }
 
+//shoots the note by using the kicker motor to knock the note into the shooter wheels
   public void shootCommand(double highSpeed, double lowSpeed, double bumpSpeed) {
     
     fastShooterMotor.set(-highSpeed);
     slowShooterMotor.set(-highSpeed);
     shooterHoldMotor.set(-bumpSpeed);
   }
-
+//same spinup as shooter, but for amp speeds
   public void spinUpAmp(double highSpeed, double lowSpeed) {
     fastShooterMotor.set(-highSpeed);
     slowShooterMotor.set(-lowSpeed);
     //shooterHoldMotor.set(-Constants.shooterBumpSpeed);
   }
+  //same as shoot command, but for amp
   public void ampShootCommand(double highSpeed, double lowSpeed) {
     fastShooterMotor.set(-highSpeed);
     slowShooterMotor.set(-lowSpeed);
