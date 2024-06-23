@@ -12,6 +12,7 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.CANSparkMaxUtil;
 import frc.robot.Constants;
@@ -190,11 +191,22 @@ public class SwerveModule {
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond) + drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond);
 
 
-            driveMotor.setVoltage(invertDriveMotor ? driveAutoMotorVoltage * -1 : driveAutoMotorVoltage);
+            driveMotor.setVoltage(invertDriveMotor ? (driveAutoMotorVoltage + feedForward.calculate(desiredDriveVel)) * -1 : (driveAutoMotorVoltage + feedForward.calculate(desiredDriveVel)));
         }
 
     
     }
+    //set voltage for System Identification
+    public void set_volt_SysId(double volts) {
+        /*boolean invertDriveMotor = setAngle(desiredState);
+        if (invertDriveMotor) {
+            this.driveMotor.setInverted(true);
+        } else {
+            this.driveMotor.setInverted(false);
+        }**/
+        driveMotor.setVoltage(volts);
+    }
+
     //runs the PID loop for the turning motor, but only if the required speed is greater than 1% motor power, then powers the turning motor
     private boolean setAngle(SwerveModuleState desiredState) {
         boolean invertDriveMotor = false;

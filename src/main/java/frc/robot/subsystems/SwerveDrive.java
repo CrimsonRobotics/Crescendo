@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -17,11 +15,18 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants;
 
 public class SwerveDrive extends SubsystemBase {
@@ -36,6 +41,7 @@ public class SwerveDrive extends SubsystemBase {
   private final Joystick driverL;
   private final Joystick driverR;
 
+  private SysIdRoutine.Mechanism sys_id_mechanism;
   // dt is DriveTrain
   public SwerveDrive(Joystick driverL, Joystick driverR) {
     // creates a "map" of the robot, recording the position of each swerve wheel
@@ -68,6 +74,25 @@ public class SwerveDrive extends SubsystemBase {
 
     field = new Field2d();
 
+    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+    final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+     final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+     final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+
+    sys_id_mechanism = new Mechanism((Measure<Voltage> volts) -> {
+      this.dt[0].set_volt_SysId(Double.valueOf(volts.toString()));
+      this.dt[1].set_volt_SysId(Double.valueOf(volts.toString()));
+      this.dt[2].set_volt_SysId(Double.valueOf(volts.toString()));
+      this.dt[3].set_volt_SysId(Double.valueOf(volts.toString()));
+    }
+    , log -> {
+      log.motor("Wheel 1")
+        .voltage(
+          
+        )
+    }, null);
   }
 
   public void drive(Translation2d translation, double rotation, boolean isFieldRelative, boolean isAuto) {
