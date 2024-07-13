@@ -193,7 +193,10 @@ public class SwerveModule {
             driveVelocity = driveVelFilter.calculate(driveEncoder.getVelocity());
             desiredDriveVel = desiredDriveFilter.calculate(desiredState.speedMetersPerSecond);
             //double driveAutoMotorVoltage = drivePID.calculate(driveEncoder.getVelocity(), desiredState.speedMetersPerSecond) + feedForward.calculate(desiredState.speedMetersPerSecond);
-            double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel);
+            //double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel);
+
+            //auto drive motor voltage with feed forward added in
+            double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel + feedForward.calculate(desiredDriveVel));
 
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
 
