@@ -98,9 +98,13 @@ public class RobotContainer {
   private final JoystickButton alignButton = new JoystickButton(driverR, 1);
 
   //creates sysId buttons
+  //quasistatic forward test
   private final JoystickButton quas_Button_for = new JoystickButton(driverR, 3);
+  //quasistatic reverse test
   private final JoystickButton quas_Button_rev = new JoystickButton(driverR, 4);
+  //dynamic forward test
   private final JoystickButton dyna_Button_for = new JoystickButton(driverR,5);
+  //dynamic reverse test
   private final JoystickButton dyna_Button_rev = new JoystickButton(driverR, 6);
   
 
@@ -203,11 +207,13 @@ public class RobotContainer {
     FeedForwardButton.onTrue(new PivotVoltSet(shooterPivot, Constants.ampPos));
     //FeedForwardButton.onFalse(new PivotOff(shooterPivot));
     
-    //sysid buttons
+    //sysid buttons run system idnetificaiton command
     quas_Button_for.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kForward, 0));
     quas_Button_rev.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kReverse, 0));
     dyna_Button_for.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kForward, 1));
     dyna_Button_rev.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kReverse, 1));
+
+
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
