@@ -7,11 +7,13 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.CANSparkMaxUtil;
@@ -44,6 +46,11 @@ public class SwerveModule {
     private final PIDController drivePID; 
     private final PIDController turningPID;
 
+    //drive profile pid controller
+    private final ProfiledPIDController drive_prof_pid_control;
+    //drive profile pid constraints
+    private final TrapezoidProfile.Constraints drive_prof_constraints;
+
     private final LinearFilter driveVelFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
     private final LinearFilter desiredDriveFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
@@ -51,7 +58,7 @@ public class SwerveModule {
     private double desiredDriveVel;
 
     //feedforward loop here: will use for auto
-    private final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
+    private final SimpleMotorFeedforward feedForward;
 
       //the skeleton of each individual swerve module
     public SwerveModule(int moduleNumber, int driveMotorId, int turningMotorId, int canCoderId, Rotation2d turningOffest) {
@@ -101,6 +108,13 @@ public class SwerveModule {
         this.driveEncoder.setPosition(0);
 
         this.drivePID = new PIDController(Constants.drivekP, Constants.drivekI, Constants.drivekD);
+
+        //trapezoid profile max vel and acceleration constraints
+        this.drive_prof_constraints = new TrapezoidProfile.Constraints(null, null);
+        //assigning drive profile pid controller
+        this.drive_prof_pid_control = new ProfiledPIDController(Constants.drivekP, Constants.drivekI, Constants.drivekD, this.drive_prof_constraints);
+        //creating feed forward variable
+        this.feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
 
     }
     
@@ -196,7 +210,10 @@ public class SwerveModule {
             //double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel);
 
             //auto drive motor voltage with feed forward added in
-            double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel + feedForward.calculate(desiredDriveVel));
+            //double driveAutoMotorVoltage = this.drivePID.calculate(driveVelocity, desiredDriveVel) + this.feedForward.calculate(desiredDriveVel);
+
+            //auto drive motor voltage with profile pid and feed forward
+            double driveAutoMotorVoltage = this.drive_prof_pid_control.calculate(driveVelocity, desiredDriveVel) + this.feedForward.calculate(desiredDriveVel);
 
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
 
