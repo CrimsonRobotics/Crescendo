@@ -51,7 +51,7 @@ public class SwerveModule {
     private double desiredDriveVel;
 
     //feedforward loop here: will use for auto
-    private final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
+    private final SimpleMotorFeedforward feedForward;
 
       //the skeleton of each individual swerve module
     public SwerveModule(int moduleNumber, int driveMotorId, int turningMotorId, int canCoderId, Rotation2d turningOffest) {
@@ -101,6 +101,7 @@ public class SwerveModule {
         this.driveEncoder.setPosition(0);
 
         this.drivePID = new PIDController(Constants.drivekP, Constants.drivekI, Constants.drivekD);
+        this.feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
 
     }
     
@@ -196,7 +197,7 @@ public class SwerveModule {
             //double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel);
 
             //auto drive motor voltage with feed forward added in
-            double driveAutoMotorVoltage = drivePID.calculate(driveVelocity, desiredDriveVel + feedForward.calculate(desiredDriveVel));
+            double driveAutoMotorVoltage = this.drivePID.calculate(driveVelocity, desiredDriveVel) + this.feedForward.calculate(desiredDriveVel);
 
             //double driveAutoMotorVoltage = feedForward.calculate(desiredState.speedMetersPerSecond);
 
