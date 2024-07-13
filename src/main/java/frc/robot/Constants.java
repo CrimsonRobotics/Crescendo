@@ -103,7 +103,8 @@ public final class Constants {
   public static final double turningkI = 0.00069; //init value .0006
   public static final double turningkD = 0.0001; //init value 
 
-  
+  //Robot wheel circumference
+  public static final double wheel_circumference = 1;
 
 
   //Gear Ratios (for the conversion factors)

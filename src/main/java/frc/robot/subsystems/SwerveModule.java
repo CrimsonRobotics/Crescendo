@@ -137,6 +137,15 @@ public class SwerveModule {
         return new SwerveModulePosition(this.driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
         //returns a different swervemodulestate object with the position and angle of the modules
     }
+
+    //get encoder distance
+    public double get_encoder_distance() {
+        return (this.driveEncoder.getPosition() * Constants.wheel_circumference);
+    }
+    //gets the encoder rate in distance/s
+    public double get_encoder_rate() {
+        return ((this.driveEncoder.getVelocity() * Constants.wheel_circumference) / 60);
+    }
     
 
     /**
@@ -205,6 +214,11 @@ public class SwerveModule {
             this.driveMotor.setInverted(false);
         }**/
         driveMotor.setVoltage(volts);
+    }
+
+    //gets current set speed(for sysID)
+    public Double get_set_speed() {
+        return this.turningMotor.get();
     }
 
     //runs the PID loop for the turning motor, but only if the required speed is greater than 1% motor power, then powers the turning motor

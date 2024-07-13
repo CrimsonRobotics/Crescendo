@@ -21,13 +21,20 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants;
+
+import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
@@ -42,6 +49,7 @@ public class SwerveDrive extends SubsystemBase {
   private final Joystick driverR;
 
   private SysIdRoutine.Mechanism sys_id_mechanism;
+
   // dt is DriveTrain
   public SwerveDrive(Joystick driverL, Joystick driverR) {
     // creates a "map" of the robot, recording the position of each swerve wheel
@@ -53,14 +61,14 @@ public class SwerveDrive extends SubsystemBase {
 
 
     this.dt = new SwerveModule[] {
-        new SwerveModule(0, Constants.mod0DriveMotor, Constants.mod0TurningMotor, Constants.mod0CANCoder,
-            Constants.mod0TurningOffset),
-        new SwerveModule(1, Constants.mod1DriveMotor, Constants.mod1TurningMotor, Constants.mod1CANCoder,
-            Constants.mod1TurningOffset),
-        new SwerveModule(2, Constants.mod2DriveMotor, Constants.mod2TurningMotor, Constants.mod2CANCoder,
-            Constants.mod2TurningOffset),
-        new SwerveModule(3, Constants.mod3DriveMotor, Constants.mod3TurningMotor, Constants.mod3CANCoder,
-            Constants.mod3TurningOffset)
+      new SwerveModule(0, Constants.mod0DriveMotor, Constants.mod0TurningMotor, Constants.mod0CANCoder,
+        Constants.mod0TurningOffset),
+      new SwerveModule(1, Constants.mod1DriveMotor, Constants.mod1TurningMotor, Constants.mod1CANCoder,
+        Constants.mod1TurningOffset),
+      new SwerveModule(2, Constants.mod2DriveMotor, Constants.mod2TurningMotor, Constants.mod2CANCoder,
+        Constants.mod2TurningOffset),
+      new SwerveModule(3, Constants.mod3DriveMotor, Constants.mod3TurningMotor, Constants.mod3CANCoder,
+        Constants.mod3TurningOffset)
     };
     odometry = new SwerveDriveOdometry(Constants.SwerveMap, getYaw(), new SwerveModulePosition[] {dt[0].getPosition(),
        dt[1].getPosition(), dt[2].getPosition(), dt[3].getPosition()
@@ -74,26 +82,62 @@ public class SwerveDrive extends SubsystemBase {
 
     field = new Field2d();
 
-    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-    final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
-    // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-     final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
-    // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-     final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
-
-    sys_id_mechanism = new Mechanism((Measure<Voltage> volts) -> {
-      this.dt[0].set_volt_SysId(Double.valueOf(volts.toString()));
-      this.dt[1].set_volt_SysId(Double.valueOf(volts.toString()));
-      this.dt[2].set_volt_SysId(Double.valueOf(volts.toString()));
-      this.dt[3].set_volt_SysId(Double.valueOf(volts.toString()));
-    }
-    , log -> {
-      log.motor("Wheel 1")
-        .voltage(
-          
-        )
-    }, null);
+    sys_id_mechanism = new SysIdRoutine.Mechanism(
+      (Measure<Voltage> volts) -> {
+        dt[0].set_volt_SysId(volts.in(Volts));
+        dt[1].set_volt_SysId(volts.in(Volts));
+        dt[2].set_volt_SysId(volts.in(Volts));
+        dt[3].set_volt_SysId(volts.in(Volts));
+      },
+      log -> {
+        //logging wheel 1
+        log.motor("Wheel 1")
+          .voltage(
+            m_appliedVoltage.mut_replace(
+              this.dt[0].get_set_speed() * RobotController.getBatteryVoltage(), Volts))
+          .linearPosition(m_distance.mut_replace(this.dt[0].get_encoder_distance(), Meters))
+          .linearVelocity(
+            m_velocity.mut_replace(this.dt[0].get_encoder_rate(), MetersPerSecond));
+            //logging wheel 2
+        log.motor("Wheel 2")
+          .voltage(
+            m_appliedVoltage.mut_replace(
+              this.dt[1].get_set_speed() * RobotController.getBatteryVoltage(), Volts))
+          .linearPosition(m_distance.mut_replace(this.dt[1].get_encoder_distance(), Meters))
+          .linearVelocity(
+            m_velocity.mut_replace(this.dt[1].get_encoder_rate(), MetersPerSecond));
+        //logging wheel 3
+        log.motor("Wheel 3")
+          .voltage(
+            m_appliedVoltage.mut_replace(
+              this.dt[2].get_set_speed() * RobotController.getBatteryVoltage(), Volts))
+          .linearPosition(m_distance.mut_replace(this.dt[2].get_encoder_distance(), Meters))
+          .linearVelocity(
+            m_velocity.mut_replace(this.dt[2].get_encoder_rate(), MetersPerSecond));
+        //logging wheel 4
+        log.motor("Wheel 4")
+          .voltage(
+            m_appliedVoltage.mut_replace(
+              this.dt[3].get_set_speed() * RobotController.getBatteryVoltage(), Volts))
+          .linearPosition(m_distance.mut_replace(this.dt[3].get_encoder_distance(), Meters))
+          .linearVelocity(
+            m_velocity.mut_replace(this.dt[3].get_encoder_rate(), MetersPerSecond));
+      },
+      this);
   }
+
+  // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+    final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+    final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+  
+  private final SysIdRoutine sys_id_routine =
+    new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      sys_id_mechanism);
+  
 
   public void drive(Translation2d translation, double rotation, boolean isFieldRelative, boolean isAuto) {
     //translation.getAngle()
@@ -165,6 +209,24 @@ public class SwerveDrive extends SubsystemBase {
     return (false)
         ? Rotation2d.fromDegrees(360 - gyro.getYaw())
         : Rotation2d.fromDegrees(gyro.getYaw());
+  }
+
+  /**
+   * Returns a command that will execute a quasistatic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return sys_id_routine.quasistatic(direction);
+  }
+
+  /**
+   * Returns a command that will execute a dynamic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return sys_id_routine.dynamic(direction);
   }
 
   @Override

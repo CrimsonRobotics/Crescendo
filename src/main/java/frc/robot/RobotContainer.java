@@ -36,6 +36,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.commands.CloseMidAuto;
 import frc.robot.commands.CloseRightAuto;
 import frc.robot.commands.SwerveWeaver;
+import frc.robot.commands.SysId;
 import frc.robot.commands.ThreeNoteLeftAuto;
 import frc.robot.commands.TwoNoteLeftAuto;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -50,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -95,6 +97,11 @@ public class RobotContainer {
 
   private final JoystickButton alignButton = new JoystickButton(driverR, 1);
 
+  //creates sysId buttons
+  private final JoystickButton quas_Button_for = new JoystickButton(driverR, 3);
+  private final JoystickButton quas_Button_rev = new JoystickButton(driverR, 4);
+  private final JoystickButton dyna_Button_for = new JoystickButton(driverR,5);
+  private final JoystickButton dyna_Button_rev = new JoystickButton(driverR, 6);
   
 
   
@@ -196,8 +203,11 @@ public class RobotContainer {
     FeedForwardButton.onTrue(new PivotVoltSet(shooterPivot, Constants.ampPos));
     //FeedForwardButton.onFalse(new PivotOff(shooterPivot));
     
-
-    
+    //sysid buttons
+    quas_Button_for.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kForward, 0));
+    quas_Button_rev.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kReverse, 0));
+    dyna_Button_for.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kForward, 1));
+    dyna_Button_rev.onTrue(new SysId(driveSwerve, SysIdRoutine.Direction.kReverse, 1));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
