@@ -117,12 +117,6 @@ public class SwerveModule {
         //creating feed forward variable
         this.feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
 
-        //trapezoid profile max vel and acceleration constraints
-        this.drive_prof_constraints = new TrapezoidProfile.Constraints(null, null);
-        //assigning drive profile pid controller
-        this.drive_prof_pid_control = new ProfiledPIDController(Constants.drivekP, Constants.drivekI, Constants.drivekD, this.drive_prof_constraints);
-        //creating feed forward variable
-        this.feedForward = new SimpleMotorFeedforward(Constants.ffkS, Constants.ffkV, Constants.ffkA);
 
     }
     
