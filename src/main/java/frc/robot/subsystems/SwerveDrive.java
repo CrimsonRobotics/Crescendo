@@ -5,6 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,6 +40,8 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.List;
+
 public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   private SwerveDriveOdometry odometry;
@@ -49,6 +55,15 @@ public class SwerveDrive extends SubsystemBase {
   private final Joystick driverR;
 
   private SysIdRoutine.Mechanism sys_id_mechanism;
+  
+  //path following command
+  private FollowPathHolonomic path_follow;
+  //path to follow
+  private PathPlannerPath path;
+  //bezier points for path
+  private List<Translation2d> bezier_points;
+  //path constraints for velocity and accel
+  private PathConstraints path_constraints;
 
   // dt is DriveTrain
   public SwerveDrive(Joystick driverL, Joystick driverR) {
@@ -79,6 +94,22 @@ public class SwerveDrive extends SubsystemBase {
 
     Timer.delay(1);
     resetToAbsolute2();
+
+
+    //assigning bezier points
+    bezier_points = List.of(
+      new Translation2d(1,1),
+      new Translation2d(-1,2),
+      new Translation2d(0,3)
+    );
+
+    //assigning path constraints
+    path_constraints = new PathConstraints(Constants.path_max_acc, Constants.path_max_acc, Constants.path_max_ang_vel, Constants.path_max_ang_acc);
+
+    //path to follow
+    path = new PathPlannerPath( bezier_points, path_constraints, new GoalEndState(0, new Rotation2d(3/4*(Math.PI))));
+    //assigns path followign command
+    path_follow = new FollowPathHolonomic(path, this.getPose(), null, null, null, null, null);
 
     field = new Field2d();
 

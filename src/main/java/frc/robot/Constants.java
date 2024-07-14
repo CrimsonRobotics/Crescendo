@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.io.FilenameFilter;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -105,6 +107,13 @@ public final class Constants {
 
   //Robot wheel circumference
   public static final double wheel_circumference = 1;
+
+  //path planning constants
+  //path constraints constants
+  public static final double path_max_vel = 0.5;
+  public static final double path_max_acc = 0.15;
+  public static final double path_max_ang_vel = .2;
+  public static final double path_max_ang_acc = .05;
 
 
   //Gear Ratios (for the conversion factors)
