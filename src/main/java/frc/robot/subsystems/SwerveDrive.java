@@ -109,7 +109,7 @@ public class SwerveDrive extends SubsystemBase {
     //path to follow
     path = new PathPlannerPath( bezier_points, path_constraints, new GoalEndState(0, new Rotation2d(3/4*(Math.PI))));
     //assigns path followign command
-    path_follow = new FollowPathHolonomic(path, this.getPose(), null, null, null, null, null);
+    path_follow = new FollowPathHolonomic(path, this.getPose(), this.getStates(), this.setModuleStates(), null, null, null);
 
     field = new Field2d();
 
